@@ -5,6 +5,8 @@ ARDS (www.aladdin-rd.ru)
 
 Пример получения информации о библиотеке, слоте и токене
 
+Расширенный и дополненый (Alex)
+
 ************************************************************************/
 
 #include <Windows.h>
@@ -2089,8 +2091,7 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 						{
 							printf("\nObject: %08X\n", hObjects[nObjectsIndex]);
 
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x1000);
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0x80001000, 0x80001400);
+							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x0800);
 
 							hGlobalObjects[nGlobalObjects++] = hObjects[nObjectsIndex];
 						}
@@ -2123,8 +2124,7 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 						{
 							printf("\nObject: %08X\n", hObjects[nObjectsIndex]);
 
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x1000);
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0x80001000, 0x80001400);
+							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x0800);
 
 							hGlobalObjects[nGlobalObjects++] = hObjects[nObjectsIndex];
 						}
@@ -2156,8 +2156,7 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 						{
 							printf("\nObject: %08X\n", hObjects[nObjectsIndex]);
 
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x1000);
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0x80001000, 0x80001400);
+							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x0800);
 
 							hGlobalObjects[nGlobalObjects++] = hObjects[nObjectsIndex];
 						}
@@ -2190,8 +2189,7 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 						{
 							printf("\nObject: %08X\n", hObjects[nObjectsIndex]);
 
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x1000);
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0x80001000, 0x80001400);
+							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x0800);
 
 							hGlobalObjects[nGlobalObjects++] = hObjects[nObjectsIndex];
 						}
@@ -2224,8 +2222,7 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 						{
 							printf("\nObject: %08X\n", hObjects[nObjectsIndex]);
 
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x1000);
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0x80001000, 0x80001400);
+							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x0800);
 
 							hGlobalObjects[nGlobalObjects++] = hObjects[nObjectsIndex];
 						}
@@ -2259,7 +2256,7 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 							printf("\nObject: %08X\n", hObjects[nObjectsIndex]);
 
 							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x1000);
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0x80001000, 0x80001400);
+							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0x80001000, 0x80003000);
 
 							hGlobalObjects[nGlobalObjects++] = hObjects[nObjectsIndex];
 						}
@@ -2323,7 +2320,7 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 						printf("\nObject: %08X\n", hObjects[nObjectsIndex]);
 
 						PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x1000);
-						PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0x80001000, 0x80001400);
+						PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0x80001000, 0x80003000);
 
 						hGlobalObjects[nGlobalObjects++] = hObjects[nObjectsIndex];
 					}
