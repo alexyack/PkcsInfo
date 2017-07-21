@@ -919,11 +919,15 @@ void PrintAttrributeName(CK_ATTRIBUTE_TYPE type, CK_RV ckr)
 		}
 		else if(type == 0x8000120f)
 		{
-			printf("              ETCKA_8000120f: ");
+			printf("              ETCKA_8000120F: ");
 		}
 		else if(type == 0x80001212)
 		{
 			printf("              ETCKA_80001212: ");
+		}
+		else if(type == 0x80001401)
+		{
+			printf("              ETCKA_80001401: ");
 		}
 		else
 		{
@@ -1658,6 +1662,10 @@ void PrintObjectInfo(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hObject, int n
 			{
 				PrintULONGValue(pBuffer, cbBuffer);
 			}
+			else if(ckAttr.type == 0x80001401)
+			{
+				PrintULONGValue(pBuffer, cbBuffer);
+			}
 			else
 			{
 				PrintBLOBValue(ckAttr.pValue, ckAttr.ulValueLen, 16);
@@ -2091,7 +2099,7 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 						{
 							printf("\nObject: %08X\n", hObjects[nObjectsIndex]);
 
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x0800);
+							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x0600);
 
 							hGlobalObjects[nGlobalObjects++] = hObjects[nObjectsIndex];
 						}
@@ -2124,7 +2132,7 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 						{
 							printf("\nObject: %08X\n", hObjects[nObjectsIndex]);
 
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x0800);
+							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x0600);
 
 							hGlobalObjects[nGlobalObjects++] = hObjects[nObjectsIndex];
 						}
@@ -2156,7 +2164,7 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 						{
 							printf("\nObject: %08X\n", hObjects[nObjectsIndex]);
 
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x0800);
+							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x0600);
 
 							hGlobalObjects[nGlobalObjects++] = hObjects[nObjectsIndex];
 						}
@@ -2189,7 +2197,7 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 						{
 							printf("\nObject: %08X\n", hObjects[nObjectsIndex]);
 
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x0800);
+							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x0600);
 
 							hGlobalObjects[nGlobalObjects++] = hObjects[nObjectsIndex];
 						}
@@ -2222,7 +2230,7 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 						{
 							printf("\nObject: %08X\n", hObjects[nObjectsIndex]);
 
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x0800);
+							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x0600);
 
 							hGlobalObjects[nGlobalObjects++] = hObjects[nObjectsIndex];
 						}
@@ -2271,7 +2279,7 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 
 		if(CKR_OK == pFunctionList->C_FindObjectsInit(hSession, ckattr, 1))
 		{
-			nObjectsCount = 256;
+			nObjectsCount = OBJECT_COUNT;
 
 			if(CKR_OK == pFunctionList->C_FindObjects(hSession, hObjects, nObjectsCount, &nObjectsCount))
 			{
@@ -2289,8 +2297,41 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 						{
 							printf("\nObject: %08X\n", hObjects[nObjectsIndex]);
 
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x1000);
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0x80001000, 0x80003000);
+							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x0600);
+							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0x80001B00, 0x80001C00);
+
+							hGlobalObjects[nGlobalObjects++] = hObjects[nObjectsIndex];
+						}
+					}
+				}
+			}
+
+			pFunctionList->C_FindObjectsFinal(hSession);
+		}
+
+		cko = CKO_DOMAIN_PARAMETERS;
+
+		if(CKR_OK == pFunctionList->C_FindObjectsInit(hSession, ckattr, 1))
+		{
+			nObjectsCount = OBJECT_COUNT;
+
+			if(CKR_OK == pFunctionList->C_FindObjects(hSession, hObjects, nObjectsCount, &nObjectsCount))
+			{
+				printf("\nCKO_DOMAIN_PARAMETERS Object count: %d\n", nObjectsCount);
+
+				if(nObjectsCount > 0)
+				{
+					for(nObjectsIndex = 0; nObjectsIndex < nObjectsCount; nObjectsIndex++)
+					{
+						if(ObjectFind(hGlobalObjects, nGlobalObjects, hObjects[nObjectsIndex]))
+						{
+							printf("\nObject: %08X Duplicate\n", hObjects[nObjectsIndex]);
+						}
+						else
+						{
+							printf("\nObject: %08X\n", hObjects[nObjectsIndex]);
+
+							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x0600);
 
 							hGlobalObjects[nGlobalObjects++] = hObjects[nObjectsIndex];
 						}
@@ -2419,16 +2460,12 @@ int main(int argc, char *argv[])
 	CK_BBOOL bInit;
 
 	bInit = FALSE;
+	szLibrary = "jcPkcs11.dll";
+	szPin = NULL;
 
-	if(argc > 1)
-		szLibrary = argv[1];
-	else
-		szLibrary = "jcPkcs11.dll";
+	if(argc > 1) szLibrary = argv[1];
 
-	if(argc > 3)
-		szPin = argv[3];
-	else
-		szPin = NULL;
+	if(argc > 3) szPin = argv[3];
 
 	hLibrary = LoadLibrary(szLibrary);
 
@@ -2438,7 +2475,7 @@ int main(int argc, char *argv[])
 		goto end;
 	}
 
-	printf("LoadLibrary: '%s'\n", szLibrary);
+	printf("LoadLibrary      : '%s'\n", szLibrary);
 
 	pGetFunctionList = (CK_C_GetFunctionList)GetProcAddress(hLibrary, "C_GetFunctionList");
 
@@ -2448,7 +2485,7 @@ int main(int argc, char *argv[])
 		goto end;
 	}
 
-	printf("GetProcAddress: ok\n");
+	printf("GetProcAddress   : ok\n");
 
 	rv = pGetFunctionList(&pFunctionList);
 	if(rv != CKR_OK)
@@ -2467,7 +2504,7 @@ int main(int argc, char *argv[])
 		goto end;
 	}                       
 
-	printf("C_Initialize: ok\n");
+	printf("C_Initialize     : ok\n");
 
 	// получаем информацию о библиотеке
 	rv = pFunctionList->C_GetInfo(&sInfo);
@@ -2480,8 +2517,10 @@ int main(int argc, char *argv[])
 	// выводим информацию о библиотеке
 	PrintInfo(&sInfo);
 
+	slotCount = 0;
+
 	// получаем список слотов с поключенными токенами
-	rv = pFunctionList->C_GetSlotList(CK_TRUE, NULL, &slotCount);
+	rv = pFunctionList->C_GetSlotList(CK_FALSE, NULL, &slotCount);
 	if(rv != CKR_OK)
 	{
 		PrintError("C_GetSlotList", rv);
@@ -2490,7 +2529,7 @@ int main(int argc, char *argv[])
 
 	slots = (CK_SLOT_ID_PTR)malloc(sizeof(CK_SLOT_ID)*slotCount);
 
-	rv = pFunctionList->C_GetSlotList(CK_TRUE, slots, &slotCount);
+	rv = pFunctionList->C_GetSlotList(CK_FALSE, slots, &slotCount);
 	if(rv != CKR_OK)
 	{
 		PrintError("C_GetSlotList", rv);
@@ -2530,7 +2569,7 @@ int main(int argc, char *argv[])
 
 				if(rv != CKR_OK)
 				{
-					PrintError("C_GetSlotInfo", rv);
+					PrintError("C_GetTokenInfo", rv);
 					continue;
 				}
 
