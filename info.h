@@ -4,7 +4,7 @@
 
 void PrintError(char* func, int retCode);
 void PrintInfo(CK_INFO_PTR pInfo);
-void PrintSlotInfo(CK_SLOT_INFO_PTR pInfo, CK_ULONG slotNumber);
+void PrintSlotInfo(CK_SLOT_INFO_PTR pInfo, CK_ULONG slotNumber, CK_SLOT_ID slotID);
 void PrintTokenInfo(CK_TOKEN_INFO_PTR pInfo);
 
 void PrintBOOLValue(CK_BYTE_PTR pValue, CK_ULONG nValue);
@@ -13,6 +13,7 @@ void PrintULONGValue(CK_BYTE_PTR pValue, CK_ULONG nValue);
 void PrintTextValue(CK_BYTE_PTR pValue, CK_ULONG nValue);
 void PrintDateValue(CK_BYTE_PTR pValue, CK_ULONG nValue);
 void PrintOIDValue(CK_BYTE_PTR pValue, CK_ULONG nValue);
+void PrintDNValue(CK_BYTE_PTR pValue, CK_ULONG nValue);
 
 void PrintAttrributeName(CK_ATTRIBUTE_TYPE type, CK_RV ckr);
 void PrintObjectClass(CK_OBJECT_CLASS ckUlong);

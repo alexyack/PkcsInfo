@@ -25,6 +25,15 @@ ARDS (www.aladdin-rd.ru)
 #define CKA_NAME_HASH_ALGORITHM         0x0000008C
 #endif // CKA_NAME_HASH_ALGORITHM
 
+#ifndef CKK_GOSTR3410_512
+#define CKK_GOSTR3410_512				(0x80000000 | 0x54321000 | 0x003)
+#endif // CKK_GOSTR3410_512
+
+#ifndef CKK_KUZNECHIK
+#define CKK_KUZNECHIK					(0x80000000 | 0x54321000 | 0x004)
+#endif // CKK_KUZNECHIK
+
+
 CK_C_GetFunctionList pGetFunctionList;
 CK_FUNCTION_LIST_PTR pFunctionList;
 
@@ -159,9 +168,9 @@ void PrintInfo(CK_INFO_PTR pInfo)
 /************************************************************************
 Функция выводит на экран информацию о заданом слоте
 ************************************************************************/
-void PrintSlotInfo(CK_SLOT_INFO_PTR pInfo, CK_ULONG slotNumber)
+void PrintSlotInfo(CK_SLOT_INFO_PTR pInfo, CK_ULONG slotNumber, CK_SLOT_ID slotID)
 {
-	printf("\nSlot #%u:\n", slotNumber);
+	printf("\nSlot #%u = %d [%X]:\n", slotNumber, slotID, slotID);
 
 	printf("Manufacturer             : %.32s\n", pInfo->manufacturerID);
 	printf("Description              : %.64s\n", pInfo->slotDescription);
@@ -300,7 +309,7 @@ void PrintDateValue(CK_BYTE_PTR pValue, CK_ULONG nValue)
 void PrintOIDValue(CK_BYTE_PTR pValue, CK_ULONG nValue)
 {
 	DWORD dwOID;
-	LPCSTR lpOID;
+	LPSTR lpOID;
 	CHAR szOID[512];
 
 	dwOID = 512;
@@ -309,6 +318,27 @@ void PrintOIDValue(CK_BYTE_PTR pValue, CK_ULONG nValue)
 	if((nValue > 2) && (pValue[0] == 6) && CryptDecodeObject(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, X509_OBJECT_IDENTIFIER, pValue, nValue, CRYPT_DECODE_SHARE_OID_STRING_FLAG, &lpOID, &dwOID))
 	{
 		printf("%s\n", lpOID);
+	}
+	else
+	{
+		PrintBLOBValue(pValue, nValue, 16);
+	}
+}
+
+void PrintDNValue(CK_BYTE_PTR pValue, CK_ULONG nValue)
+{
+	DWORD dwOID;
+	CHAR szOID[512];
+	CERT_NAME_BLOB blob;
+
+	blob.pbData = pValue;
+	blob.cbData = nValue;
+
+	dwOID = 512;
+
+	if((nValue > 2) && (pValue[0] == 0x30) && CertNameToStr(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, &blob, CERT_X500_NAME_STR, szOID, dwOID))
+	{
+		printf("'%s'\n", szOID);
 	}
 	else
 	{
@@ -994,30 +1024,6 @@ void PrintFeautureType(CK_HW_FEATURE_TYPE ckUlong)
 	{
 		printf("CKH_USER_INTERFACE\n");
 	}
-	else if(ckUlong == CKO_PRIVATE_KEY)
-	{
-		printf("CKO_PRIVATE_KEY\n");
-	}
-	else if(ckUlong == CKO_SECRET_KEY)
-	{
-		printf("CKO_SECRET_KEY\n");
-	}
-	else if(ckUlong == CKO_HW_FEATURE)
-	{
-		printf("CKO_HW_FEATURE\n");
-	}
-	else if(ckUlong == CKO_DOMAIN_PARAMETERS)
-	{
-		printf("CKO_DOMAIN_PARAMETERS\n");
-	}
-	else if(ckUlong == CKO_MECHANISM)
-	{
-		printf("CKO_MECHANISM\n");
-	}
-	else if(ckUlong == CKO_OTP_KEY)
-	{
-		printf("CKO_OTP_KEY\n");
-	}
 	else if(ckUlong == 0x80005003)
 	{
 		printf("ETCKH_PIN_POLICY\n");
@@ -1052,23 +1058,35 @@ void PrintKeyType(CK_ULONG ckUlong)
 {
 	if(ckUlong == CKK_GOST28147)
 	{
-		printf("CKK_GOST28147\n");
+		printf("GOST 28147\n");
 	}
 	else if(ckUlong == CKK_GOSTR3410)
 	{
-		printf("CKK_GOSTR3410\n");
+		printf("GOST R 3410\n");
 	}
 	else if(ckUlong == CKK_GOSTR3411)
 	{
-		printf("CKK_GOSTR3411\n");
+		printf("GOST R 3411\n");
 	}
 	else if(ckUlong == CKK_RSA)
 	{
-		printf("CKK_RSA\n");
+		printf("RSA\n");
 	}
 	else if(ckUlong == CKK_ECDSA)
 	{
-		printf("CKK_ECDSA\n");
+		printf("ECDSA\n");
+	}
+	else if(ckUlong == CKK_GOSTR3410_512)
+	{
+		printf("GOST R 3410 512\n");
+	}
+	else if(ckUlong == CKK_KUZNECHIK)
+	{
+		printf("KUZNECHIK\n");
+	}
+	else if(ckUlong == CKK_ECDSA)
+	{
+		printf("ECDSA\n");
 	}
 	else
 	{
@@ -1186,7 +1204,11 @@ void PrintObjectInfo(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hObject, int n
 			}
 			else if(ckAttr.type == CKA_SUBJECT)
 			{
-				PrintBLOBValue(ckAttr.pValue, ckAttr.ulValueLen, 16);
+				PrintDNValue(ckAttr.pValue, ckAttr.ulValueLen);
+			}
+			else if(ckAttr.type == CKA_ISSUER)
+			{
+				PrintDNValue(ckAttr.pValue, ckAttr.ulValueLen);
 			}
 			else if(ckAttr.type == CKA_ID)
 			{
@@ -1201,10 +1223,6 @@ void PrintObjectInfo(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hObject, int n
 				ckUlong = *((CK_ULONG_PTR)pBuffer);
 
 				PrintCertiFicateType(ckUlong);
-			}
-			else if(ckAttr.type == CKA_ISSUER)
-			{
-				PrintBLOBValue(ckAttr.pValue, ckAttr.ulValueLen, 16);
 			}
 			else if(ckAttr.type == CKA_OBJECT_ID)
 			{
@@ -2060,13 +2078,15 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 		{CKA_HW_FEATURE_TYPE, &pae, sizeof(pae)}
 	};
 
+	CK_OBJECT_HANDLE hObject;
+
 	nGlobalObjects = 0;
 
-	if(CKR_OK == pFunctionList->C_OpenSession(ckSlot, CKF_SERIAL_SESSION | CKF_RW_SESSION, NULL, NULL, &hSession))
+	if(CKR_OK == pFunctionList->C_OpenSession(ckSlot, CKF_SERIAL_SESSION, NULL, NULL, &hSession))
 	{
 		if(szPin && strlen(szPin) > 0)
 		{
-			if(CKR_OK == pFunctionList->C_Login(hSession, CKU_USER, szPin, strlen(szPin)))
+			if(CKR_OK == pFunctionList->C_Login(hSession, CKU_USER, szPin, (CK_ULONG)strlen(szPin)))
 			{
 				printf("\nLogin Successful\n");
 				bLogin = CK_TRUE;
@@ -2091,17 +2111,19 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 				{
 					for(nObjectsIndex = 0; nObjectsIndex < nObjectsCount; nObjectsIndex++)
 					{
-						if(ObjectFind(hGlobalObjects, nGlobalObjects, hObjects[nObjectsIndex]))
+						hObject = hObjects[nObjectsIndex];
+
+						if(ObjectFind(hGlobalObjects, nGlobalObjects, hObject))
 						{
-							printf("\nObject: %08X Duplicate\n", hObjects[nObjectsIndex]);
+							printf("\nObject: %8d [%08X] Duplicate\n", hObject, hObject);
 						}
 						else
 						{
-							printf("\nObject: %08X\n", hObjects[nObjectsIndex]);
+							printf("\nObject: %8d [%08X]\n", hObject, hObject);
 
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x0600);
+							PrintObjectInfo(hSession, hObject, 0, 0x0600);
 
-							hGlobalObjects[nGlobalObjects++] = hObjects[nObjectsIndex];
+							hGlobalObjects[nGlobalObjects++] = hObject;
 						}
 					}
 				}
@@ -2124,17 +2146,19 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 				{
 					for(nObjectsIndex = 0; nObjectsIndex < nObjectsCount; nObjectsIndex++)
 					{
-						if(ObjectFind(hGlobalObjects, nGlobalObjects, hObjects[nObjectsIndex]))
+						hObject = hObjects[nObjectsIndex];
+
+						if(ObjectFind(hGlobalObjects, nGlobalObjects, hObject))
 						{
-							printf("\nObject: %08X Duplicate\n", hObjects[nObjectsIndex]);
+							printf("\nObject: %8d [%08X] Duplicate\n", hObject, hObject);
 						}
 						else
 						{
-							printf("\nObject: %08X\n", hObjects[nObjectsIndex]);
+							printf("\nObject: %8d [%08X]\n", hObject, hObject);
 
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x0600);
+							PrintObjectInfo(hSession, hObject, 0, 0x0600);
 
-							hGlobalObjects[nGlobalObjects++] = hObjects[nObjectsIndex];
+							hGlobalObjects[nGlobalObjects++] = hObject;
 						}
 					}
 				}
@@ -2156,17 +2180,19 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 				{
 					for(nObjectsIndex = 0; nObjectsIndex < nObjectsCount; nObjectsIndex++)
 					{
-						if(ObjectFind(hGlobalObjects, nGlobalObjects, hObjects[nObjectsIndex]))
+						hObject = hObjects[nObjectsIndex];
+
+						if(ObjectFind(hGlobalObjects, nGlobalObjects, hObject))
 						{
-							printf("\nObject: %08X Duplicate\n", hObjects[nObjectsIndex]);
+							printf("\nObject: %8d [%08X] Duplicate\n", hObject, hObject);
 						}
 						else
 						{
-							printf("\nObject: %08X\n", hObjects[nObjectsIndex]);
+							printf("\nObject: %8d [%08X]\n", hObject, hObject);
 
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x0600);
+							PrintObjectInfo(hSession, hObject, 0, 0x0600);
 
-							hGlobalObjects[nGlobalObjects++] = hObjects[nObjectsIndex];
+							hGlobalObjects[nGlobalObjects++] = hObject;
 						}
 					}
 				}
@@ -2189,17 +2215,19 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 				{
 					for(nObjectsIndex = 0; nObjectsIndex < nObjectsCount; nObjectsIndex++)
 					{
-						if(ObjectFind(hGlobalObjects, nGlobalObjects, hObjects[nObjectsIndex]))
+						hObject = hObjects[nObjectsIndex];
+
+						if(ObjectFind(hGlobalObjects, nGlobalObjects, hObject))
 						{
-							printf("\nObject: %08X Duplicate\n", hObjects[nObjectsIndex]);
+							printf("\nObject: %8d [%08X] Duplicate\n", hObject, hObject);
 						}
 						else
 						{
-							printf("\nObject: %08X\n", hObjects[nObjectsIndex]);
+							printf("\nObject: %8d [%08X]\n", hObject, hObject);
 
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x0600);
+							PrintObjectInfo(hSession, hObject, 0, 0x0600);
 
-							hGlobalObjects[nGlobalObjects++] = hObjects[nObjectsIndex];
+							hGlobalObjects[nGlobalObjects++] = hObject;
 						}
 					}
 				}
@@ -2222,17 +2250,19 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 				{
 					for(nObjectsIndex = 0; nObjectsIndex < nObjectsCount; nObjectsIndex++)
 					{
-						if(ObjectFind(hGlobalObjects, nGlobalObjects, hObjects[nObjectsIndex]))
+						hObject = hObjects[nObjectsIndex];
+
+						if(ObjectFind(hGlobalObjects, nGlobalObjects, hObject))
 						{
-							printf("\nObject: %08X Duplicate\n", hObjects[nObjectsIndex]);
+							printf("\nObject: %8d [%08X] Duplicate\n", hObject, hObject);
 						}
 						else
 						{
-							printf("\nObject: %08X\n", hObjects[nObjectsIndex]);
+							printf("\nObject: %8d [%08X]\n", hObject, hObject);
 
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x0600);
+							PrintObjectInfo(hSession, hObject, 0, 0x0600);
 
-							hGlobalObjects[nGlobalObjects++] = hObjects[nObjectsIndex];
+							hGlobalObjects[nGlobalObjects++] = hObject;
 						}
 					}
 				}
@@ -2255,18 +2285,20 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 				{
 					for(nObjectsIndex = 0; nObjectsIndex < nObjectsCount; nObjectsIndex++)
 					{
-						if(ObjectFind(hGlobalObjects, nGlobalObjects, hObjects[nObjectsIndex]))
+						hObject = hObjects[nObjectsIndex];
+
+						if(ObjectFind(hGlobalObjects, nGlobalObjects, hObject))
 						{
-							printf("\nObject: %08X Duplicate\n", hObjects[nObjectsIndex]);
+							printf("\nObject: %8d [%08X] Duplicate\n", hObject, hObject);
 						}
 						else
 						{
-							printf("\nObject: %08X\n", hObjects[nObjectsIndex]);
+							printf("\nObject: %8d [%08X]\n", hObject, hObject);
 
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x1000);
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0x80001000, 0x80003000);
+							PrintObjectInfo(hSession, hObject, 0, 0x1000);
+							PrintObjectInfo(hSession, hObject, 0x80001000, 0x80003000);
 
-							hGlobalObjects[nGlobalObjects++] = hObjects[nObjectsIndex];
+							hGlobalObjects[nGlobalObjects++] = hObject;
 						}
 					}
 				}
@@ -2289,18 +2321,20 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 				{
 					for(nObjectsIndex = 0; nObjectsIndex < nObjectsCount; nObjectsIndex++)
 					{
-						if(ObjectFind(hGlobalObjects, nGlobalObjects, hObjects[nObjectsIndex]))
+						hObject = hObjects[nObjectsIndex];
+
+						if(ObjectFind(hGlobalObjects, nGlobalObjects, hObject))
 						{
-							printf("\nObject: %08X Duplicate\n", hObjects[nObjectsIndex]);
+							printf("\nObject: %8d [%08X] Duplicate\n", hObject, hObject);
 						}
 						else
 						{
-							printf("\nObject: %08X\n", hObjects[nObjectsIndex]);
+							printf("\nObject: %8d [%08X]\n", hObject, hObject);
 
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x0600);
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0x80001B00, 0x80001C00);
+							PrintObjectInfo(hSession, hObject, 0, 0x0600);
+							PrintObjectInfo(hSession, hObject, 0x80001B00, 0x80001C00);
 
-							hGlobalObjects[nGlobalObjects++] = hObjects[nObjectsIndex];
+							hGlobalObjects[nGlobalObjects++] = hObject;
 						}
 					}
 				}
@@ -2323,17 +2357,19 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 				{
 					for(nObjectsIndex = 0; nObjectsIndex < nObjectsCount; nObjectsIndex++)
 					{
-						if(ObjectFind(hGlobalObjects, nGlobalObjects, hObjects[nObjectsIndex]))
+						hObject = hObjects[nObjectsIndex];
+
+						if(ObjectFind(hGlobalObjects, nGlobalObjects, hObject))
 						{
-							printf("\nObject: %08X Duplicate\n", hObjects[nObjectsIndex]);
+							printf("\nObject: %8d [%08X] Duplicate\n", hObject, hObject);
 						}
 						else
 						{
-							printf("\nObject: %08X\n", hObjects[nObjectsIndex]);
+							printf("\nObject: %8d [%08X]\n", hObject, hObject);
 
-							PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x0600);
+							PrintObjectInfo(hSession, hObject, 0, 0x0600);
 
-							hGlobalObjects[nGlobalObjects++] = hObjects[nObjectsIndex];
+							hGlobalObjects[nGlobalObjects++] = hObject;
 						}
 					}
 				}
@@ -2352,18 +2388,20 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 
 				for(nObjectsIndex = 0; nObjectsIndex < nObjectsCount; nObjectsIndex++)
 				{
-					if(ObjectFind(hGlobalObjects, nGlobalObjects, hObjects[nObjectsIndex]))
+					hObject = hObjects[nObjectsIndex];
+
+					if(ObjectFind(hGlobalObjects, nGlobalObjects, hObject))
 					{
-						printf("\nObject: %08X Duplicate\n", hObjects[nObjectsIndex]);
+						printf("\nObject: %8d [%08X] Duplicate\n", hObject, hObject);
 					}
 					else
 					{
-						printf("\nObject: %08X\n", hObjects[nObjectsIndex]);
+						printf("\nObject: %8d [%08X]\n", hObject, hObject);
 
-						PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0, 0x1000);
-						PrintObjectInfo(hSession, hObjects[nObjectsIndex], 0x80001000, 0x80003000);
+						PrintObjectInfo(hSession, hObject, 0, 0x1000);
+						PrintObjectInfo(hSession, hObject, 0x80001000, 0x80003000);
 
-						hGlobalObjects[nGlobalObjects++] = hObjects[nObjectsIndex];
+						hGlobalObjects[nGlobalObjects++] = hObject;
 					}
 				}
 			}
@@ -2460,7 +2498,7 @@ int main(int argc, char *argv[])
 	CK_BBOOL bInit;
 
 	bInit = FALSE;
-	szLibrary = "jcPkcs11.dll";
+	szLibrary = "jcPkcs11-2.dll";
 	szPin = NULL;
 
 	if(argc > 1) szLibrary = argv[1];
@@ -2471,6 +2509,7 @@ int main(int argc, char *argv[])
 
 	if(hLibrary == NULL)
 	{
+		rv = GetLastError();
 		PrintError("LoadLibrary", CKR_FUNCTION_FAILED);
 		goto end;
 	}
@@ -2495,6 +2534,7 @@ int main(int argc, char *argv[])
 	}                       
 
 	printf("C_GetFunctionList: ok\n");
+	printf("FunctionList Version: %d.%d\n", pFunctionList->version.major, pFunctionList->version.minor);
 
 	// инициализация библиотеки
 	rv = pFunctionList->C_Initialize(0);
@@ -2504,6 +2544,8 @@ int main(int argc, char *argv[])
 		goto end;
 	}                       
 
+	bInit = CK_TRUE;
+	
 	printf("C_Initialize     : ok\n");
 
 	// получаем информацию о библиотеке
@@ -2545,11 +2587,14 @@ int main(int argc, char *argv[])
 
 	for(slotIndex = 0; slotIndex < slotCount; slotIndex++)
 	{
+		CK_SLOT_ID slotID;
 		CK_SLOT_INFO slotInfo;
 		CK_TOKEN_INFO tokenInfo;
 
+		slotID = slots[slotIndex];
+
 		// получаем информации о слоте
-		rv = pFunctionList->C_GetSlotInfo(slots[slotIndex], &slotInfo);
+		rv = pFunctionList->C_GetSlotInfo(slotID, &slotInfo);
 
 		if(rv != CKR_OK)
 		{
@@ -2560,12 +2605,12 @@ int main(int argc, char *argv[])
 		if(argc < 3 || strncmp(argv[2], slotInfo.slotDescription, min(strlen(argv[2]), 64)) == 0)
 		{
 			// выводим информацию о выбраном слоте
-			PrintSlotInfo(&slotInfo, slotIndex);
+			PrintSlotInfo(&slotInfo, slotIndex, slotID);
 
 			if(slotInfo.flags & CKF_TOKEN_PRESENT)
 			{
 				// получить информацию о токене в слоте
-				rv = pFunctionList->C_GetTokenInfo(slots[slotIndex], &tokenInfo);
+				rv = pFunctionList->C_GetTokenInfo(slotID, &tokenInfo);
 
 				if(rv != CKR_OK)
 				{
@@ -2576,9 +2621,9 @@ int main(int argc, char *argv[])
 				// выводим информацию о токене 
 				PrintTokenInfo(&tokenInfo);
 
-				PrintTokenMechanism(slots[slotIndex]);
+// 				PrintTokenMechanism(slots[slotIndex]);
 
-				PrintObjectsInfo(slots[slotIndex], szPin);
+				PrintObjectsInfo(slotID, szPin);
 			}
 		}
 	}
