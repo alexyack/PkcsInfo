@@ -26,9 +26,9 @@ void PrintObjectInfo(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hObject, int n
 void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin);
 void PrintTokenMechanism(CK_SLOT_ID ckSlot);
 
-#define BUFF_SIZE		8192
-#define OBJECT_COUNT	256
-#define OBJECTS_COUNT	4096
+#define BUFF_SIZE		65536
+#define OBJECT_COUNT	4096
+#define OBJECTS_COUNT	16384
 
 BOOL ObjectFind(CK_OBJECT_HANDLE_PTR hObjects, CK_ULONG nObjects, CK_OBJECT_HANDLE hObject);
 
