@@ -147,8 +147,9 @@ void PrintError(char* func, int retCode)
 	case CKR_MUTEX_BAD : retCodeString = "CKR_MUTEX_BAD"; break;
 	case CKR_MUTEX_NOT_LOCKED : retCodeString = "CKR_MUTEX_NOT_LOCKED"; break;
 
-	default : retCodeString = "Unknown function"; break;
+	default : retCodeString = "Unknown error code"; break;
 	}
+
 	printf("Error in function %s, code= 0x%08X (%s)\n", func, retCode, retCodeString);
 }
 
@@ -170,15 +171,18 @@ void PrintInfo(CK_INFO_PTR pInfo)
 ************************************************************************/
 void PrintSlotInfo(CK_SLOT_INFO_PTR pInfo, CK_ULONG slotNumber, CK_SLOT_ID slotID)
 {
-	printf("\nSlot #%u = %d [%X]:\n", slotNumber, slotID, slotID);
+	printf("\nSlot #%2u = %12d [%08X]:\n", slotNumber, slotID, slotID);
 
-	printf("Manufacturer             : %.32s\n", pInfo->manufacturerID);
-	printf("Description              : %.64s\n", pInfo->slotDescription);
+	printf("Manufacturer             : '%.32s'\n", pInfo->manufacturerID);
+	printf("Description              : '%.64s'\n", pInfo->slotDescription);
 	printf("Hardware version         : %d.%d\n", pInfo->hardwareVersion.major, pInfo->hardwareVersion.minor);
 	printf("Firmware version         : %d.%d\n", pInfo->firmwareVersion.major, pInfo->firmwareVersion.minor);
-	printf("Token type               : %s\n", (pInfo->flags & CKF_REMOVABLE_DEVICE) ? "removable" : "not removable");
-	printf("Token slot type          : %s\n", (pInfo->flags & CKF_HW_SLOT) ? "hardware" : "not hardware");
-	printf("Token                    : %s\n", (pInfo->flags & CKF_TOKEN_PRESENT) ? "present" : "not present");
+	printf("Slot type                : %s\n", (pInfo->flags & CKF_REMOVABLE_DEVICE) ? "removable" : "stationary");
+	printf("Token type               : %s\n", (pInfo->flags & CKF_HW_SLOT) ? "hardware" : "software");
+	printf("Token is                 : %s\n", (pInfo->flags & CKF_TOKEN_PRESENT) ? "present" : "absent");
+
+	if(pInfo->flags & 0xFFFFFFF8)
+		printf("Rest of flags            : %08X\n", pInfo->flags & 0xFFFFFFF8);
 }
 
 /************************************************************************/
@@ -188,10 +192,10 @@ void PrintTokenInfo(CK_TOKEN_INFO_PTR pInfo)
 {
 	printf("\nToken:\n");
 
-	printf("Label                    : %.32s\n", pInfo->label);
-	printf("Manufacturer             : %.32s\n", pInfo->manufacturerID);
-	printf("Model                    : %.16s\n", pInfo->model);
-	printf("Serial number            : %.16s\n", pInfo->serialNumber);
+	printf("Label                    : '%.32s'\n", pInfo->label);
+	printf("Manufacturer             : '%.32s'\n", pInfo->manufacturerID);
+	printf("Model                    : '%.16s'\n", pInfo->model);
+	printf("Serial number            : '%.16s'\n", pInfo->serialNumber);
 	printf("Hardware version         : %d.%d\n", pInfo->hardwareVersion.major, pInfo->hardwareVersion.minor);
 	printf("Firmware version         : %d.%d\n", pInfo->firmwareVersion.major, pInfo->firmwareVersion.minor);
 	printf("Session count            : %d / %d\n", pInfo->ulSessionCount, pInfo->ulMaxSessionCount);
@@ -207,17 +211,19 @@ void PrintTokenInfo(CK_TOKEN_INFO_PTR pInfo)
 	printf("Clock on token           : %s\n", (pInfo->flags & CKF_CLOCK_ON_TOKEN          ) ? "Yes" : "No");
 	printf("Has PAP                  : %s\n", (pInfo->flags & CKF_PROTECTED_AUTHENTICATION_PATH) ? "Yes" : "No");
 	printf("Dual crypto operations   : %s\n", (pInfo->flags & CKF_DUAL_CRYPTO_OPERATIONS  ) ? "Yes" : "No");
-	printf("TOKEN_INITIALIZED        : %s\n", (pInfo->flags & CKF_TOKEN_INITIALIZED       ) ? "Yes" : "No");
-	printf("SECONDARY_AUTHENTICATION : %s\n", (pInfo->flags & CKF_SECONDARY_AUTHENTICATION) ? "Yes" : "No");
-	printf("USER_PIN_COUNT_LOW       : %s\n", (pInfo->flags & CKF_USER_PIN_COUNT_LOW      ) ? "Yes" : "No");
-	printf("USER_PIN_FINAL_TRY       : %s\n", (pInfo->flags & CKF_USER_PIN_FINAL_TRY      ) ? "Yes" : "No");
-	printf("USER_PIN_LOCKED          : %s\n", (pInfo->flags & CKF_USER_PIN_LOCKED         ) ? "Yes" : "No");
-	printf("USER_PIN_TO_BE_CHANGED   : %s\n", (pInfo->flags & CKF_USER_PIN_TO_BE_CHANGED  ) ? "Yes" : "No");
-	printf("SO_PIN_COUNT_LOW         : %s\n", (pInfo->flags & CKF_SO_PIN_COUNT_LOW        ) ? "Yes" : "No");
-	printf("SO_PIN_FINAL_TRY         : %s\n", (pInfo->flags & CKF_SO_PIN_FINAL_TRY        ) ? "Yes" : "No");
-	printf("SO_PIN_LOCKED            : %s\n", (pInfo->flags & CKF_SO_PIN_LOCKED           ) ? "Yes" : "No");
-	printf("SO_PIN_TO_BE_CHANGED     : %s\n", (pInfo->flags & CKF_SO_PIN_TO_BE_CHANGED    ) ? "Yes" : "No");
-
+	printf("Token initialized        : %s\n", (pInfo->flags & CKF_TOKEN_INITIALIZED       ) ? "Yes" : "No");
+	printf("Secondary authentication : %s\n", (pInfo->flags & CKF_SECONDARY_AUTHENTICATION) ? "Yes" : "No");
+	printf("User PIN count low       : %s\n", (pInfo->flags & CKF_USER_PIN_COUNT_LOW      ) ? "Yes" : "No");
+	printf("User PIN final try       : %s\n", (pInfo->flags & CKF_USER_PIN_FINAL_TRY      ) ? "Yes" : "No");
+	printf("User PIN locked          : %s\n", (pInfo->flags & CKF_USER_PIN_LOCKED         ) ? "Yes" : "No");
+	printf("User PIN to be changed   : %s\n", (pInfo->flags & CKF_USER_PIN_TO_BE_CHANGED  ) ? "Yes" : "No");
+	printf("SO PIN count low         : %s\n", (pInfo->flags & CKF_SO_PIN_COUNT_LOW        ) ? "Yes" : "No");
+	printf("SO PIN final try         : %s\n", (pInfo->flags & CKF_SO_PIN_FINAL_TRY        ) ? "Yes" : "No");
+	printf("SO PIN locked            : %s\n", (pInfo->flags & CKF_SO_PIN_LOCKED           ) ? "Yes" : "No");
+	printf("SO PIN to be changed     : %s\n", (pInfo->flags & CKF_SO_PIN_TO_BE_CHANGED    ) ? "Yes" : "No");
+	
+	if(pInfo->flags & 0xFF00F090)
+		printf("Rest of flags            : %08X\n", pInfo->flags & 0xFF00F090);
 }
 
 void PrintBOOLValue(CK_BYTE_PTR pValue, CK_ULONG nValue)
@@ -279,7 +285,7 @@ void PrintULONGValue(CK_BYTE_PTR pValue, CK_ULONG nValue)
 
 		memcpy(&ulValue, pValue, nValue);
 
-		printf("%d (%d)\n", ulValue, nValue);
+		printf("%d [%0*X] (%d)\n", ulValue, nValue * 2, ulValue, nValue);
 	}
 	else
 	{
@@ -533,11 +539,11 @@ void PrintAttrributeName(CK_ATTRIBUTE_TYPE type, CK_RV ckr)
 		}
 		else if(type == CKA_HASH_OF_SUBJECT_PUBLIC_KEY)
 		{
-			printf("             HASH_OF_SUBJECT: ");
+			printf("         HASH_OF_SUBJECT_KEY: ");
 		}
 		else if(type == CKA_HASH_OF_ISSUER_PUBLIC_KEY)
 		{
-			printf("              HASH_OF_ISSUER: ");
+			printf("          HASH_OF_ISSUER_KEY: ");
 		}
 		else if(type == CKA_CHECK_VALUE)
 		{
@@ -1340,7 +1346,9 @@ void PrintObjectInfo(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hObject, int n
 			}
 			else if(ckAttr.type == CKA_NAME_HASH_ALGORITHM)
 			{
-				PrintULONGValue(pBuffer, cbBuffer);
+				ckUlong = *((CK_ULONG_PTR)pBuffer);
+
+				PrintMechanismType(ckUlong);
 			}
 			else if(ckAttr.type == CKA_COPYABLE)
 			{
@@ -2115,11 +2123,11 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 
 						if(ObjectFind(hGlobalObjects, nGlobalObjects, hObject))
 						{
-							printf("\nObject: %8d [%08X] Duplicate\n", hObject, hObject);
+							printf("\nObject %12d [%08X]: Duplicate\n", hObject, hObject);
 						}
 						else
 						{
-							printf("\nObject: %8d [%08X]\n", hObject, hObject);
+							printf("\nObject %12d [%08X]:\n", hObject, hObject);
 
 							PrintObjectInfo(hSession, hObject, 0, 0x0600);
 
@@ -2150,11 +2158,11 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 
 						if(ObjectFind(hGlobalObjects, nGlobalObjects, hObject))
 						{
-							printf("\nObject: %8d [%08X] Duplicate\n", hObject, hObject);
+							printf("\nObject %12d [%08X]: Duplicate\n", hObject, hObject);
 						}
 						else
 						{
-							printf("\nObject: %8d [%08X]\n", hObject, hObject);
+							printf("\nObject %12d [%08X]:\n", hObject, hObject);
 
 							PrintObjectInfo(hSession, hObject, 0, 0x0600);
 
@@ -2184,11 +2192,11 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 
 						if(ObjectFind(hGlobalObjects, nGlobalObjects, hObject))
 						{
-							printf("\nObject: %8d [%08X] Duplicate\n", hObject, hObject);
+							printf("\nObject %12d [%08X]: Duplicate\n", hObject, hObject);
 						}
 						else
 						{
-							printf("\nObject: %8d [%08X]\n", hObject, hObject);
+							printf("\nObject %12d [%08X]:\n", hObject, hObject);
 
 							PrintObjectInfo(hSession, hObject, 0, 0x0600);
 
@@ -2219,11 +2227,11 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 
 						if(ObjectFind(hGlobalObjects, nGlobalObjects, hObject))
 						{
-							printf("\nObject: %8d [%08X] Duplicate\n", hObject, hObject);
+							printf("\nObject %12d [%08X]: Duplicate\n", hObject, hObject);
 						}
 						else
 						{
-							printf("\nObject: %8d [%08X]\n", hObject, hObject);
+							printf("\nObject %12d [%08X]:\n", hObject, hObject);
 
 							PrintObjectInfo(hSession, hObject, 0, 0x0600);
 
@@ -2254,11 +2262,11 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 
 						if(ObjectFind(hGlobalObjects, nGlobalObjects, hObject))
 						{
-							printf("\nObject: %8d [%08X] Duplicate\n", hObject, hObject);
+							printf("\nObject %12d [%08X]: Duplicate\n", hObject, hObject);
 						}
 						else
 						{
-							printf("\nObject: %8d [%08X]\n", hObject, hObject);
+							printf("\nObject %12d [%08X]:\n", hObject, hObject);
 
 							PrintObjectInfo(hSession, hObject, 0, 0x0600);
 
@@ -2289,11 +2297,11 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 
 						if(ObjectFind(hGlobalObjects, nGlobalObjects, hObject))
 						{
-							printf("\nObject: %8d [%08X] Duplicate\n", hObject, hObject);
+							printf("\nObject %12d [%08X]: Duplicate\n", hObject, hObject);
 						}
 						else
 						{
-							printf("\nObject: %8d [%08X]\n", hObject, hObject);
+							printf("\nObject %12d [%08X]:\n", hObject, hObject);
 
 							PrintObjectInfo(hSession, hObject, 0, 0x1000);
 							PrintObjectInfo(hSession, hObject, 0x80001000, 0x80003000);
@@ -2325,11 +2333,11 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 
 						if(ObjectFind(hGlobalObjects, nGlobalObjects, hObject))
 						{
-							printf("\nObject: %8d [%08X] Duplicate\n", hObject, hObject);
+							printf("\nObject %12d [%08X]: Duplicate\n", hObject, hObject);
 						}
 						else
 						{
-							printf("\nObject: %8d [%08X]\n", hObject, hObject);
+							printf("\nObject %12d [%08X]:\n", hObject, hObject);
 
 							PrintObjectInfo(hSession, hObject, 0, 0x0600);
 							PrintObjectInfo(hSession, hObject, 0x80001B00, 0x80001C00);
@@ -2361,11 +2369,11 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 
 						if(ObjectFind(hGlobalObjects, nGlobalObjects, hObject))
 						{
-							printf("\nObject: %8d [%08X] Duplicate\n", hObject, hObject);
+							printf("\nObject %12d [%08X]: Duplicate\n", hObject, hObject);
 						}
 						else
 						{
-							printf("\nObject: %8d [%08X]\n", hObject, hObject);
+							printf("\nObject %12d [%08X]:\n", hObject, hObject);
 
 							PrintObjectInfo(hSession, hObject, 0, 0x0600);
 
@@ -2392,11 +2400,11 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 
 					if(ObjectFind(hGlobalObjects, nGlobalObjects, hObject))
 					{
-						printf("\nObject: %8d [%08X] Duplicate\n", hObject, hObject);
+						printf("\nObject %12d [%08X]: Duplicate\n", hObject, hObject);
 					}
 					else
 					{
-						printf("\nObject: %8d [%08X]\n", hObject, hObject);
+						printf("\nObject %12d [%08X]:\n", hObject, hObject);
 
 						PrintObjectInfo(hSession, hObject, 0, 0x1000);
 						PrintObjectInfo(hSession, hObject, 0x80001000, 0x80003000);
