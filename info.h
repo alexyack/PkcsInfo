@@ -20,6 +20,7 @@ void PrintObjectClass(CK_OBJECT_CLASS ckUlong);
 void PrintFeautureType(CK_HW_FEATURE_TYPE ckUlong);
 void PrintMechanismType(CK_MECHANISM_TYPE ckMechType);
 void PrintCertiFicateType(CK_ULONG ckUlong);
+void PrintCertificateCategory(CK_ULONG ckUlong);
 void PrintKeyType(CK_ULONG ckUlong);
 
 void PrintObjectInfo(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hObject, int nStart, int nFinish);

@@ -21,6 +21,10 @@ ARDS (www.aladdin-rd.ru)
 #define CKA_COPYABLE					0x00000171
 #endif // CKA_COPYABLE
 
+#ifndef CKA_DESTROYABLE
+#define CKA_DESTROYABLE					0x00000172
+#endif // CKA_DESTROYABLE
+
 #ifndef CKA_NAME_HASH_ALGORITHM
 #define CKA_NAME_HASH_ALGORITHM         0x0000008C
 #endif // CKA_NAME_HASH_ALGORITHM
@@ -33,6 +37,21 @@ ARDS (www.aladdin-rd.ru)
 #define CKK_KUZNECHIK					(0x80000000 | 0x54321000 | 0x004)
 #endif // CKK_KUZNECHIK
 
+#ifndef CK_CERTIFICATE_CATEGORY_UNSPECIFIED
+#define CK_CERTIFICATE_CATEGORY_UNSPECIFIED		0x00000000
+#endif // CK_CERTIFICATE_CATEGORY_UNSPECIFIED
+
+#ifndef CK_CERTIFICATE_CATEGORY_TOKEN_USER
+#define CK_CERTIFICATE_CATEGORY_TOKEN_USER		0x00000001
+#endif // CK_CERTIFICATE_CATEGORY_TOKEN_USER
+
+#ifndef CK_CERTIFICATE_CATEGORY_AUTHORITY
+#define CK_CERTIFICATE_CATEGORY_AUTHORITY		0x00000002
+#endif // CK_CERTIFICATE_CATEGORY_AUTHORITY
+
+#ifndef CK_CERTIFICATE_CATEGORY_OTHER_ENTITY
+#define CK_CERTIFICATE_CATEGORY_OTHER_ENTITY	0x00000003
+#endif // CK_CERTIFICATE_CATEGORY_OTHER_ENTITY
 
 CK_C_GetFunctionList pGetFunctionList;
 CK_FUNCTION_LIST_PTR pFunctionList;
@@ -613,7 +632,7 @@ void PrintAttrributeName(CK_ATTRIBUTE_TYPE type, CK_RV ckr)
 		{
 			printf("                CKA_COPYABLE: ");
 		}
-		else if(type == 0x00000172) // CKA_DESTROYABLE
+		else if(type == CKA_DESTROYABLE)
 		{
 			printf("             CKA_DESTROYABLE: ");
 		}
@@ -1060,6 +1079,30 @@ void PrintCertiFicateType(CK_ULONG ckUlong)
 	}
 }
 
+void PrintCertificateCategory(CK_ULONG ckUlong)
+{
+	if(ckUlong == CK_CERTIFICATE_CATEGORY_UNSPECIFIED)
+	{
+		printf("UNSPECIFIED\n");
+	}
+	else if(ckUlong == CK_CERTIFICATE_CATEGORY_TOKEN_USER)
+	{
+		printf("TOKEN_USER\n");
+	}
+	else if(ckUlong == CK_CERTIFICATE_CATEGORY_AUTHORITY)
+	{
+		printf("AUTHORITY\n");
+	}
+	else if(ckUlong == CK_CERTIFICATE_CATEGORY_OTHER_ENTITY)
+	{
+		printf("OTHER_ENTITY\n");
+	}
+	else
+	{
+		printf("%08X\n", ckUlong);
+	}
+}
+
 void PrintKeyType(CK_ULONG ckUlong)
 {
 	if(ckUlong == CKK_GOST28147)
@@ -1124,16 +1167,21 @@ void PrintObjectInfo(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hObject, int n
 		{
 			cbBuffer = ckAttr.ulValueLen;
 
-			if(ckAttr.type == CKA_CLASS)
+			if(cbBuffer == 4)
 			{
 				ckUlong = *((CK_ULONG_PTR)pBuffer);
+			}
+			else
+			{
+				ckUlong = 0;
+			}
 
+			if(ckAttr.type == CKA_CLASS)
+			{
 				PrintObjectClass(ckUlong);
 			}
 			else if(ckAttr.type == CKA_HW_FEATURE_TYPE)
 			{
-				ckUlong = *((CK_ULONG_PTR)pBuffer);
-
 				PrintFeautureType(ckUlong);
 			}
 			else if(ckAttr.type == CKA_TOKEN)
@@ -1152,7 +1200,7 @@ void PrintObjectInfo(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hObject, int n
 			{
 				PrintBOOLValue(pBuffer, cbBuffer);
 			}
-			else if(ckAttr.type == 0x00000172) // CKA_DESTROYABLE
+			else if(ckAttr.type == CKA_DESTROYABLE)
 			{
 				PrintBOOLValue(pBuffer, cbBuffer);
 			}
@@ -1226,8 +1274,6 @@ void PrintObjectInfo(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hObject, int n
 			}
 			else if(ckAttr.type == CKA_CERTIFICATE_TYPE)
 			{
-				ckUlong = *((CK_ULONG_PTR)pBuffer);
-
 				PrintCertiFicateType(ckUlong);
 			}
 			else if(ckAttr.type == CKA_OBJECT_ID)
@@ -1236,8 +1282,6 @@ void PrintObjectInfo(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hObject, int n
 			}
 			else if(ckAttr.type == CKA_KEY_TYPE)
 			{
-				ckUlong = *((CK_ULONG_PTR)pBuffer);
-
 				PrintKeyType(ckUlong);
 			}
 			else if(ckAttr.type == CKA_MODULUS)
@@ -1338,7 +1382,7 @@ void PrintObjectInfo(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hObject, int n
 			}
 			else if(ckAttr.type == CKA_CERTIFICATE_CATEGORY)
 			{
-				PrintULONGValue(pBuffer, cbBuffer);
+				PrintCertificateCategory(ckUlong);
 			}
 			else if(ckAttr.type == CKA_JAVA_MIDP_SECURITY_DOMAIN)
 			{
@@ -1346,8 +1390,6 @@ void PrintObjectInfo(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hObject, int n
 			}
 			else if(ckAttr.type == CKA_NAME_HASH_ALGORITHM)
 			{
-				ckUlong = *((CK_ULONG_PTR)pBuffer);
-
 				PrintMechanismType(ckUlong);
 			}
 			else if(ckAttr.type == CKA_COPYABLE)
@@ -1580,8 +1622,6 @@ void PrintObjectInfo(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hObject, int n
 			}
 			else if(ckAttr.type == CKA_MECHANISM_TYPE)
 			{
-				ckUlong = *((CK_ULONG_PTR)pBuffer);
-
 				PrintMechanismType(ckUlong);
 			}
 			else if(ckAttr.type == 0x80001B02)
