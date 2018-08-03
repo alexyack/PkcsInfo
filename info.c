@@ -2169,7 +2169,7 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 						{
 							printf("\nObject %12d [%08X]:\n", hObject, hObject);
 
-							PrintObjectInfo(hSession, hObject, 0, 0x0600);
+							PrintObjectInfo(hSession, hObject, 0, 0x0800);
 
 							hGlobalObjects[nGlobalObjects++] = hObject;
 						}
@@ -2204,7 +2204,7 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 						{
 							printf("\nObject %12d [%08X]:\n", hObject, hObject);
 
-							PrintObjectInfo(hSession, hObject, 0, 0x0600);
+							PrintObjectInfo(hSession, hObject, 0, 0x0800);
 
 							hGlobalObjects[nGlobalObjects++] = hObject;
 						}
@@ -2238,7 +2238,7 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 						{
 							printf("\nObject %12d [%08X]:\n", hObject, hObject);
 
-							PrintObjectInfo(hSession, hObject, 0, 0x0600);
+							PrintObjectInfo(hSession, hObject, 0, 0x0800);
 
 							hGlobalObjects[nGlobalObjects++] = hObject;
 						}
@@ -2273,7 +2273,7 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 						{
 							printf("\nObject %12d [%08X]:\n", hObject, hObject);
 
-							PrintObjectInfo(hSession, hObject, 0, 0x0600);
+							PrintObjectInfo(hSession, hObject, 0, 0x0800);
 
 							hGlobalObjects[nGlobalObjects++] = hObject;
 						}
@@ -2308,7 +2308,7 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 						{
 							printf("\nObject %12d [%08X]:\n", hObject, hObject);
 
-							PrintObjectInfo(hSession, hObject, 0, 0x0600);
+							PrintObjectInfo(hSession, hObject, 0, 0x0800);
 
 							hGlobalObjects[nGlobalObjects++] = hObject;
 						}
@@ -2379,7 +2379,7 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 						{
 							printf("\nObject %12d [%08X]:\n", hObject, hObject);
 
-							PrintObjectInfo(hSession, hObject, 0, 0x0600);
+							PrintObjectInfo(hSession, hObject, 0, 0x0800);
 							PrintObjectInfo(hSession, hObject, 0x80001B00, 0x80001C00);
 
 							hGlobalObjects[nGlobalObjects++] = hObject;
@@ -2415,7 +2415,7 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 						{
 							printf("\nObject %12d [%08X]:\n", hObject, hObject);
 
-							PrintObjectInfo(hSession, hObject, 0, 0x0600);
+							PrintObjectInfo(hSession, hObject, 0, 0x0800);
 
 							hGlobalObjects[nGlobalObjects++] = hObject;
 						}
