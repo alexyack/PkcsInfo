@@ -2274,6 +2274,7 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 							printf("\nObject %12d [%08X]:\n", hObject, hObject);
 
 							PrintObjectInfo(hSession, hObject, 0, 0x0800);
+							PrintObjectInfo(hSession, hObject, 0x80000000, 0x80010000);
 
 							hGlobalObjects[nGlobalObjects++] = hObject;
 						}
@@ -2309,6 +2310,7 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 							printf("\nObject %12d [%08X]:\n", hObject, hObject);
 
 							PrintObjectInfo(hSession, hObject, 0, 0x0800);
+							PrintObjectInfo(hSession, hObject, 0x80000000, 0x80010000);
 
 							hGlobalObjects[nGlobalObjects++] = hObject;
 						}
@@ -2343,8 +2345,8 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 						{
 							printf("\nObject %12d [%08X]:\n", hObject, hObject);
 
-							PrintObjectInfo(hSession, hObject, 0, 0x1000);
-							PrintObjectInfo(hSession, hObject, 0x80001000, 0x80003000);
+							PrintObjectInfo(hSession, hObject, 0, 0x10000);
+							PrintObjectInfo(hSession, hObject, 0x80000000, 0x80010000);
 
 							hGlobalObjects[nGlobalObjects++] = hObject;
 						}
@@ -2379,8 +2381,8 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 						{
 							printf("\nObject %12d [%08X]:\n", hObject, hObject);
 
-							PrintObjectInfo(hSession, hObject, 0, 0x0800);
-							PrintObjectInfo(hSession, hObject, 0x80001B00, 0x80001C00);
+							PrintObjectInfo(hSession, hObject, 0, 0x1000);
+							PrintObjectInfo(hSession, hObject, 0x80001000, 0x80002000);
 
 							hGlobalObjects[nGlobalObjects++] = hObject;
 						}
