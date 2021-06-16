@@ -1259,10 +1259,12 @@ void PrintObjectInfo(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hObject, int n
 			else if(ckAttr.type == CKA_SUBJECT)
 			{
 				PrintDNValue(ckAttr.pValue, ckAttr.ulValueLen);
+				PrintBLOBValue(ckAttr.pValue, ckAttr.ulValueLen, 16);
 			}
 			else if(ckAttr.type == CKA_ISSUER)
 			{
 				PrintDNValue(ckAttr.pValue, ckAttr.ulValueLen);
+				PrintBLOBValue(ckAttr.pValue, ckAttr.ulValueLen, 16);
 			}
 			else if(ckAttr.type == CKA_ID)
 			{
