@@ -16,6 +16,7 @@ ARDS (www.aladdin-rd.ru)
 #include <memory.h>
 
 #include "cryptoki.h"
+#include "pkcs11ext.h"
 
 #ifndef CKA_COPYABLE
 #define CKA_COPYABLE					0x00000171
