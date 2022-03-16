@@ -1,4 +1,7 @@
 # PkcsInfo
+
+[![MSBuild](https://github.com/alexyack/PkcsInfo/actions/workflows/msbuild.yml/badge.svg)](https://github.com/alexyack/PkcsInfo/actions/workflows/msbuild.yml)
+
 PKCS#11 info tool
 
 Lists all slots and tokens.
