@@ -366,10 +366,8 @@ void PrintDNValue(CK_BYTE_PTR pValue, CK_ULONG nValue)
 	{
 		printf("'%s'\n", szOID);
 	}
-	else
-	{
-		PrintBLOBValue(pValue, nValue, 16);
-	}
+
+	PrintBLOBValue(pValue, nValue, 16);
 }
 
 void PrintAttrributeName(CK_ATTRIBUTE_TYPE type, CK_RV ckr)
@@ -1260,12 +1258,10 @@ void PrintObjectInfo(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hObject, int n
 			else if(ckAttr.type == CKA_SUBJECT)
 			{
 				PrintDNValue(ckAttr.pValue, ckAttr.ulValueLen);
-				PrintBLOBValue(ckAttr.pValue, ckAttr.ulValueLen, 16);
 			}
 			else if(ckAttr.type == CKA_ISSUER)
 			{
 				PrintDNValue(ckAttr.pValue, ckAttr.ulValueLen);
-				PrintBLOBValue(ckAttr.pValue, ckAttr.ulValueLen, 16);
 			}
 			else if(ckAttr.type == CKA_ID)
 			{
