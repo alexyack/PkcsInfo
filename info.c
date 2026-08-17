@@ -1027,7 +1027,11 @@ void PrintObjectClass(CK_OBJECT_CLASS ckUlong)
 	else if(ckUlong == CKO_OTP_KEY)
 	{
 		printf("CKO_OTP_KEY\n");
-	}	
+	}
+	else if(ckUlong == CKO_PROFILE)
+	{
+		printf("CKO_PROFILE\n");
+	}
 	else
 	{
 		printf("%08X\n", ckUlong);
