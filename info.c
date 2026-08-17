@@ -1136,9 +1136,69 @@ void PrintKeyType(CK_ULONG ckUlong)
 	{
 		printf("KUZNECHIK\n");
 	}
-	else if(ckUlong == CKK_ECDSA)
+	else if(ckUlong == CKK_EC_EDWARDS)
 	{
-		printf("ECDSA\n");
+		printf("CKK_EC_EDWARDS\n");
+	}
+	else if(ckUlong == CKK_EC_MONTGOMERY)
+	{
+		printf("CKK_EC_MONTGOMERY\n");
+	}
+	else if(ckUlong == CKK_HKDF)
+	{
+		printf("CKK_HKDF\n");
+	}
+	else if(ckUlong == CKK_SHA512_224_HMAC)
+	{
+		printf("CKK_SHA512_224_HMAC\n");
+	}
+	else if(ckUlong == CKK_SHA512_256_HMAC)
+	{
+		printf("CKK_SHA512_256_HMAC\n");
+	}
+	else if(ckUlong == CKK_SHA3_224_HMAC)
+	{
+		printf("CKK_SHA3_224_HMAC\n");
+	}
+	else if(ckUlong == CKK_SHA3_256_HMAC)
+	{
+		printf("CKK_SHA3_256_HMAC\n");
+	}
+	else if(ckUlong == CKK_SHA3_384_HMAC)
+	{
+		printf("CKK_SHA3_384_HMAC\n");
+	}
+	else if(ckUlong == CKK_SHA3_512_HMAC)
+	{
+		printf("CKK_SHA3_512_HMAC\n");
+	}
+	else if(ckUlong == CKK_BLAKE2B_160_HMAC)
+	{
+		printf("CKK_BLAKE2B_160_HMAC\n");
+	}
+	else if(ckUlong == CKK_BLAKE2B_256_HMAC)
+	{
+		printf("CKK_BLAKE2B_256_HMAC\n");
+	}
+	else if(ckUlong == CKK_BLAKE2B_384_HMAC)
+	{
+		printf("CKK_BLAKE2B_384_HMAC\n");
+	}
+	else if(ckUlong == CKK_BLAKE2B_512_HMAC)
+	{
+		printf("CKK_BLAKE2B_512_HMAC\n");
+	}
+	else if(ckUlong == CKK_SALSA20)
+	{
+		printf("CKK_SALSA20\n");
+	}
+	else if(ckUlong == CKK_X2RATCHET)
+	{
+		printf("CKK_X2RATCHET\n");
+	}
+	else if(ckUlong == CKK_XEDDSA)
+	{
+		printf("CKK_XEDDSA\n");
 	}
 	else
 	{
