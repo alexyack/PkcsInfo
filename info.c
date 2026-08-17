@@ -983,6 +983,82 @@ void PrintAttrributeName(CK_ATTRIBUTE_TYPE type, CK_RV ckr)
 		{
 			printf("              ETCKA_80001401: ");
 		}
+		else if(type == CKA_PROFILE_ID)
+		{
+			printf("              CKA_PROFILE_ID: ");
+		}
+		else if(type == CKA_X2RATCHET_BAG)
+		{
+			printf("         CKA_X2RATCHET_BAG: ");
+		}
+		else if(type == CKA_X2RATCHET_BAGSIZE)
+		{
+			printf("     CKA_X2RATCHET_BAGSIZE: ");
+		}
+		else if(type == CKA_X2RATCHET_BOBS_INITIAL_MESSAGE)
+		{
+			printf("CKA_X2RATCHET_BOBS_INITIAL: ");
+		}
+		else if(type == CKA_X2RATCHET_CKR)
+		{
+			printf("         CKA_X2RATCHET_CKR: ");
+		}
+		else if(type == CKA_X2RATCHET_CKS)
+		{
+			printf("         CKA_X2RATCHET_CKS: ");
+		}
+		else if(type == CKA_X2RATCHET_DHP)
+		{
+			printf("         CKA_X2RATCHET_DHP: ");
+		}
+		else if(type == CKA_X2RATCHET_DHR)
+		{
+			printf("         CKA_X2RATCHET_DHR: ");
+		}
+		else if(type == CKA_X2RATCHET_DHS)
+		{
+			printf("         CKA_X2RATCHET_DHS: ");
+		}
+		else if(type == CKA_X2RATCHET_HKR)
+		{
+			printf("         CKA_X2RATCHET_HKR: ");
+		}
+		else if(type == CKA_X2RATCHET_HKS)
+		{
+			printf("         CKA_X2RATCHET_HKS: ");
+		}
+		else if(type == CKA_X2RATCHET_ISALICE)
+		{
+			printf("     CKA_X2RATCHET_ISALICE: ");
+		}
+		else if(type == CKA_X2RATCHET_MKSKIPPED)
+		{
+			printf("   CKA_X2RATCHET_MKSKIPPED: ");
+		}
+		else if(type == CKA_X2RATCHET_N)
+		{
+			printf("           CKA_X2RATCHET_N: ");
+		}
+		else if(type == CKA_X2RATCHET_NHK)
+		{
+			printf("         CKA_X2RATCHET_NHK: ");
+		}
+		else if(type == CKA_X2RATCHET_NR)
+		{
+			printf("          CKA_X2RATCHET_NR: ");
+		}
+		else if(type == CKA_X2RATCHET_NS)
+		{
+			printf("          CKA_X2RATCHET_NS: ");
+		}
+		else if(type == CKA_X2RATCHET_PNS)
+		{
+			printf("         CKA_X2RATCHET_PNS: ");
+		}
+		else if(type == CKA_X2RATCHET_RK)
+		{
+			printf("          CKA_X2RATCHET_RK: ");
+		}
 		else
 		{
 			printf("            UNKNOWN %08X: ", type);
@@ -1027,7 +1103,11 @@ void PrintObjectClass(CK_OBJECT_CLASS ckUlong)
 	else if(ckUlong == CKO_OTP_KEY)
 	{
 		printf("CKO_OTP_KEY\n");
-	}	
+	}
+	else if(ckUlong == CKO_PROFILE)
+	{
+		printf("CKO_PROFILE\n");
+	}
 	else
 	{
 		printf("%08X\n", ckUlong);
@@ -1132,9 +1212,69 @@ void PrintKeyType(CK_ULONG ckUlong)
 	{
 		printf("KUZNECHIK\n");
 	}
-	else if(ckUlong == CKK_ECDSA)
+	else if(ckUlong == CKK_EC_EDWARDS)
 	{
-		printf("ECDSA\n");
+		printf("CKK_EC_EDWARDS\n");
+	}
+	else if(ckUlong == CKK_EC_MONTGOMERY)
+	{
+		printf("CKK_EC_MONTGOMERY\n");
+	}
+	else if(ckUlong == CKK_HKDF)
+	{
+		printf("CKK_HKDF\n");
+	}
+	else if(ckUlong == CKK_SHA512_224_HMAC)
+	{
+		printf("CKK_SHA512_224_HMAC\n");
+	}
+	else if(ckUlong == CKK_SHA512_256_HMAC)
+	{
+		printf("CKK_SHA512_256_HMAC\n");
+	}
+	else if(ckUlong == CKK_SHA3_224_HMAC)
+	{
+		printf("CKK_SHA3_224_HMAC\n");
+	}
+	else if(ckUlong == CKK_SHA3_256_HMAC)
+	{
+		printf("CKK_SHA3_256_HMAC\n");
+	}
+	else if(ckUlong == CKK_SHA3_384_HMAC)
+	{
+		printf("CKK_SHA3_384_HMAC\n");
+	}
+	else if(ckUlong == CKK_SHA3_512_HMAC)
+	{
+		printf("CKK_SHA3_512_HMAC\n");
+	}
+	else if(ckUlong == CKK_BLAKE2B_160_HMAC)
+	{
+		printf("CKK_BLAKE2B_160_HMAC\n");
+	}
+	else if(ckUlong == CKK_BLAKE2B_256_HMAC)
+	{
+		printf("CKK_BLAKE2B_256_HMAC\n");
+	}
+	else if(ckUlong == CKK_BLAKE2B_384_HMAC)
+	{
+		printf("CKK_BLAKE2B_384_HMAC\n");
+	}
+	else if(ckUlong == CKK_BLAKE2B_512_HMAC)
+	{
+		printf("CKK_BLAKE2B_512_HMAC\n");
+	}
+	else if(ckUlong == CKK_SALSA20)
+	{
+		printf("CKK_SALSA20\n");
+	}
+	else if(ckUlong == CKK_X2RATCHET)
+	{
+		printf("CKK_X2RATCHET\n");
+	}
+	else if(ckUlong == CKK_XEDDSA)
+	{
+		printf("CKK_XEDDSA\n");
 	}
 	else
 	{
@@ -2101,6 +2241,94 @@ void PrintMechanismType(CK_MECHANISM_TYPE ckMechType)
 	else if(ckMechType == CKM_SHA384_KEY_DERIVATION      				   ) { printf("CKM_SHA384_KEY_DERIVATION      						 \n"); }
 	else if(ckMechType == CKM_SHA512_KEY_DERIVATION      				   ) { printf("CKM_SHA512_KEY_DERIVATION      						 \n"); }
 	else if(ckMechType == CKM_SHA224_KEY_DERIVATION      				   ) { printf("CKM_SHA224_KEY_DERIVATION      						 \n"); }
+
+	/* DSA with SHA-3 (v3.0) */
+	else if(ckMechType == CKM_DSA_SHA3_224             ) { printf("CKM_DSA_SHA3_224\n"); }
+	else if(ckMechType == CKM_DSA_SHA3_256             ) { printf("CKM_DSA_SHA3_256\n"); }
+	else if(ckMechType == CKM_DSA_SHA3_384             ) { printf("CKM_DSA_SHA3_384\n"); }
+	else if(ckMechType == CKM_DSA_SHA3_512             ) { printf("CKM_DSA_SHA3_512\n"); }
+	/* RSA with SHA-3 (v3.0) */
+	else if(ckMechType == CKM_SHA3_256_RSA_PKCS        ) { printf("CKM_SHA3_256_RSA_PKCS\n"); }
+	else if(ckMechType == CKM_SHA3_384_RSA_PKCS        ) { printf("CKM_SHA3_384_RSA_PKCS\n"); }
+	else if(ckMechType == CKM_SHA3_512_RSA_PKCS        ) { printf("CKM_SHA3_512_RSA_PKCS\n"); }
+	else if(ckMechType == CKM_SHA3_256_RSA_PKCS_PSS    ) { printf("CKM_SHA3_256_RSA_PKCS_PSS\n"); }
+	else if(ckMechType == CKM_SHA3_384_RSA_PKCS_PSS    ) { printf("CKM_SHA3_384_RSA_PKCS_PSS\n"); }
+	else if(ckMechType == CKM_SHA3_512_RSA_PKCS_PSS    ) { printf("CKM_SHA3_512_RSA_PKCS_PSS\n"); }
+	else if(ckMechType == CKM_SHA3_224_RSA_PKCS        ) { printf("CKM_SHA3_224_RSA_PKCS\n"); }
+	else if(ckMechType == CKM_SHA3_224_RSA_PKCS_PSS    ) { printf("CKM_SHA3_224_RSA_PKCS_PSS\n"); }
+	/* ECDSA with SHA-3 (v3.0) */
+	else if(ckMechType == CKM_ECDSA_SHA3_224           ) { printf("CKM_ECDSA_SHA3_224\n"); }
+	else if(ckMechType == CKM_ECDSA_SHA3_256           ) { printf("CKM_ECDSA_SHA3_256\n"); }
+	else if(ckMechType == CKM_ECDSA_SHA3_384           ) { printf("CKM_ECDSA_SHA3_384\n"); }
+	else if(ckMechType == CKM_ECDSA_SHA3_512           ) { printf("CKM_ECDSA_SHA3_512\n"); }
+	/* Edwards / Montgomery curve key gen + EdDSA (v3.0) */
+	else if(ckMechType == CKM_EC_EDWARDS_KEY_PAIR_GEN  ) { printf("CKM_EC_EDWARDS_KEY_PAIR_GEN\n"); }
+	else if(ckMechType == CKM_EC_MONTGOMERY_KEY_PAIR_GEN) { printf("CKM_EC_MONTGOMERY_KEY_PAIR_GEN\n"); }
+	else if(ckMechType == CKM_EDDSA                    ) { printf("CKM_EDDSA\n"); }
+	/* SHA-3 digests and HMAC (v3.0) */
+	else if(ckMechType == CKM_SHA3_256                 ) { printf("CKM_SHA3_256\n"); }
+	else if(ckMechType == CKM_SHA3_256_HMAC            ) { printf("CKM_SHA3_256_HMAC\n"); }
+	else if(ckMechType == CKM_SHA3_256_HMAC_GENERAL    ) { printf("CKM_SHA3_256_HMAC_GENERAL\n"); }
+	else if(ckMechType == CKM_SHA3_256_KEY_GEN         ) { printf("CKM_SHA3_256_KEY_GEN\n"); }
+	else if(ckMechType == CKM_SHA3_256_KEY_DERIVATION  ) { printf("CKM_SHA3_256_KEY_DERIVATION\n"); }
+	else if(ckMechType == CKM_SHA3_224                 ) { printf("CKM_SHA3_224\n"); }
+	else if(ckMechType == CKM_SHA3_224_HMAC            ) { printf("CKM_SHA3_224_HMAC\n"); }
+	else if(ckMechType == CKM_SHA3_224_HMAC_GENERAL    ) { printf("CKM_SHA3_224_HMAC_GENERAL\n"); }
+	else if(ckMechType == CKM_SHA3_224_KEY_GEN         ) { printf("CKM_SHA3_224_KEY_GEN\n"); }
+	else if(ckMechType == CKM_SHA3_224_KEY_DERIVATION  ) { printf("CKM_SHA3_224_KEY_DERIVATION\n"); }
+	else if(ckMechType == CKM_SHA3_384                 ) { printf("CKM_SHA3_384\n"); }
+	else if(ckMechType == CKM_SHA3_384_HMAC            ) { printf("CKM_SHA3_384_HMAC\n"); }
+	else if(ckMechType == CKM_SHA3_384_HMAC_GENERAL    ) { printf("CKM_SHA3_384_HMAC_GENERAL\n"); }
+	else if(ckMechType == CKM_SHA3_384_KEY_GEN         ) { printf("CKM_SHA3_384_KEY_GEN\n"); }
+	else if(ckMechType == CKM_SHA3_384_KEY_DERIVATION  ) { printf("CKM_SHA3_384_KEY_DERIVATION\n"); }
+	else if(ckMechType == CKM_SHA3_512                 ) { printf("CKM_SHA3_512\n"); }
+	else if(ckMechType == CKM_SHA3_512_HMAC            ) { printf("CKM_SHA3_512_HMAC\n"); }
+	else if(ckMechType == CKM_SHA3_512_HMAC_GENERAL    ) { printf("CKM_SHA3_512_HMAC_GENERAL\n"); }
+	else if(ckMechType == CKM_SHA3_512_KEY_GEN         ) { printf("CKM_SHA3_512_KEY_GEN\n"); }
+	else if(ckMechType == CKM_SHA3_512_KEY_DERIVATION  ) { printf("CKM_SHA3_512_KEY_DERIVATION\n"); }
+	/* SHAKE (v3.0) */
+	else if(ckMechType == CKM_SHAKE_128                ) { printf("CKM_SHAKE_128\n"); }
+	else if(ckMechType == CKM_SHAKE_256                ) { printf("CKM_SHAKE_256\n"); }
+	else if(ckMechType == CKM_SHAKE_128_KEY_GEN        ) { printf("CKM_SHAKE_128_KEY_GEN\n"); }
+	else if(ckMechType == CKM_SHAKE_256_KEY_GEN        ) { printf("CKM_SHAKE_256_KEY_GEN\n"); }
+	else if(ckMechType == CKM_SHAKE_128_KEY_DERIVATION ) { printf("CKM_SHAKE_128_KEY_DERIVATION\n"); }
+	else if(ckMechType == CKM_SHAKE_256_KEY_DERIVATION ) { printf("CKM_SHAKE_256_KEY_DERIVATION\n"); }
+	/* BLAKE2b (v3.0) */
+	else if(ckMechType == CKM_BLAKE2B_160              ) { printf("CKM_BLAKE2B_160\n"); }
+	else if(ckMechType == CKM_BLAKE2B_160_HMAC         ) { printf("CKM_BLAKE2B_160_HMAC\n"); }
+	else if(ckMechType == CKM_BLAKE2B_160_HMAC_GENERAL ) { printf("CKM_BLAKE2B_160_HMAC_GENERAL\n"); }
+	else if(ckMechType == CKM_BLAKE2B_160_KEY_DERIVE   ) { printf("CKM_BLAKE2B_160_KEY_DERIVE\n"); }
+	else if(ckMechType == CKM_BLAKE2B_160_KEY_GEN      ) { printf("CKM_BLAKE2B_160_KEY_GEN\n"); }
+	else if(ckMechType == CKM_BLAKE2B_256              ) { printf("CKM_BLAKE2B_256\n"); }
+	else if(ckMechType == CKM_BLAKE2B_256_HMAC         ) { printf("CKM_BLAKE2B_256_HMAC\n"); }
+	else if(ckMechType == CKM_BLAKE2B_256_HMAC_GENERAL ) { printf("CKM_BLAKE2B_256_HMAC_GENERAL\n"); }
+	else if(ckMechType == CKM_BLAKE2B_256_KEY_DERIVE   ) { printf("CKM_BLAKE2B_256_KEY_DERIVE\n"); }
+	else if(ckMechType == CKM_BLAKE2B_256_KEY_GEN      ) { printf("CKM_BLAKE2B_256_KEY_GEN\n"); }
+	else if(ckMechType == CKM_BLAKE2B_384              ) { printf("CKM_BLAKE2B_384\n"); }
+	else if(ckMechType == CKM_BLAKE2B_384_HMAC         ) { printf("CKM_BLAKE2B_384_HMAC\n"); }
+	else if(ckMechType == CKM_BLAKE2B_384_HMAC_GENERAL ) { printf("CKM_BLAKE2B_384_HMAC_GENERAL\n"); }
+	else if(ckMechType == CKM_BLAKE2B_384_KEY_DERIVE   ) { printf("CKM_BLAKE2B_384_KEY_DERIVE\n"); }
+	else if(ckMechType == CKM_BLAKE2B_384_KEY_GEN      ) { printf("CKM_BLAKE2B_384_KEY_GEN\n"); }
+	else if(ckMechType == CKM_BLAKE2B_512              ) { printf("CKM_BLAKE2B_512\n"); }
+	else if(ckMechType == CKM_BLAKE2B_512_HMAC         ) { printf("CKM_BLAKE2B_512_HMAC\n"); }
+	else if(ckMechType == CKM_BLAKE2B_512_HMAC_GENERAL ) { printf("CKM_BLAKE2B_512_HMAC_GENERAL\n"); }
+	else if(ckMechType == CKM_BLAKE2B_512_KEY_DERIVE   ) { printf("CKM_BLAKE2B_512_KEY_DERIVE\n"); }
+	else if(ckMechType == CKM_BLAKE2B_512_KEY_GEN      ) { printf("CKM_BLAKE2B_512_KEY_GEN\n"); }
+	/* ChaCha20 / Poly1305 (v3.0) */
+	else if(ckMechType == CKM_CHACHA20_KEY_GEN         ) { printf("CKM_CHACHA20_KEY_GEN\n"); }
+	else if(ckMechType == CKM_CHACHA20                 ) { printf("CKM_CHACHA20\n"); }
+	else if(ckMechType == CKM_POLY1305_KEY_GEN         ) { printf("CKM_POLY1305_KEY_GEN\n"); }
+	else if(ckMechType == CKM_POLY1305                 ) { printf("CKM_POLY1305\n"); }
+	/* AES KWP (v3.0) */
+	else if(ckMechType == CKM_AES_KEY_WRAP_KWP         ) { printf("CKM_AES_KEY_WRAP_KWP\n"); }
+	/* SP 800-108 KDFs (v3.0) */
+	else if(ckMechType == CKM_SP800_108_COUNTER_KDF         ) { printf("CKM_SP800_108_COUNTER_KDF\n"); }
+	else if(ckMechType == CKM_SP800_108_FEEDBACK_KDF        ) { printf("CKM_SP800_108_FEEDBACK_KDF\n"); }
+	else if(ckMechType == CKM_SP800_108_DOUBLE_PIPELINE_KDF ) { printf("CKM_SP800_108_DOUBLE_PIPELINE_KDF\n"); }
+	/* HKDF (v3.0) */
+	else if(ckMechType == CKM_HKDF_DERIVE              ) { printf("CKM_HKDF_DERIVE\n"); }
+	else if(ckMechType == CKM_HKDF_DATA                ) { printf("CKM_HKDF_DATA\n"); }
+	else if(ckMechType == CKM_HKDF_KEY_GEN             ) { printf("CKM_HKDF_KEY_GEN\n"); }
 
 	else if(ckMechType == 0x80006001                                       ) { printf("ETCKM_PBA_LEGACY                                      \n"); }
 

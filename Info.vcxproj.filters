@@ -24,4 +24,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include=".github\workflows\msbuild.yml">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>
