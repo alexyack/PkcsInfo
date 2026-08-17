@@ -317,6 +317,7 @@ typedef CK_ULONG          CK_OBJECT_CLASS;
 #define CKO_DOMAIN_PARAMETERS 0x00000006UL
 #define CKO_MECHANISM         0x00000007UL
 #define CKO_OTP_KEY           0x00000008UL
+#define CKO_PROFILE           0x00000009UL  /* v3.0: compatibility profile object */
 
 #define CKO_VENDOR_DEFINED    0x80000000UL
 
@@ -383,7 +384,23 @@ typedef CK_ULONG          CK_KEY_TYPE;
 #define CKK_GOSTR3411           0x00000031UL
 #define CKK_GOST28147           0x00000032UL
 
-
+/* Key types added in PKCS#11 v3.0 */
+#define CKK_EC_EDWARDS          0x00000040UL
+#define CKK_EC_MONTGOMERY       0x00000041UL
+#define CKK_HKDF                0x00000042UL
+#define CKK_SHA512_224_HMAC     0x00000043UL
+#define CKK_SHA512_256_HMAC     0x00000044UL
+#define CKK_SHA3_224_HMAC       0x00000045UL
+#define CKK_SHA3_256_HMAC       0x00000046UL
+#define CKK_SHA3_384_HMAC       0x00000047UL
+#define CKK_SHA3_512_HMAC       0x00000048UL
+#define CKK_BLAKE2B_160_HMAC    0x00000049UL
+#define CKK_BLAKE2B_256_HMAC    0x0000004aUL
+#define CKK_BLAKE2B_384_HMAC    0x0000004bUL
+#define CKK_BLAKE2B_512_HMAC    0x0000004cUL
+#define CKK_SALSA20             0x0000004dUL
+#define CKK_X2RATCHET           0x0000004eUL
+#define CKK_XEDDSA              0x0000004fUL
 
 #define CKK_VENDOR_DEFINED      0x80000000UL
 
@@ -557,7 +574,40 @@ typedef CK_ULONG          CK_ATTRIBUTE_TYPE;
 #define CKA_SUPPORTED_CMS_ATTRIBUTES    0x00000503UL
 #define CKA_ALLOWED_MECHANISMS          (CKF_ARRAY_ATTRIBUTE|0x00000600UL)
 
+/* Attributes added in PKCS#11 v3.0 */
+#define CKA_PROFILE_ID                  0x00000601UL
+
+/* X2Ratchet attributes (v3.0) */
+#define CKA_X2RATCHET_BAG               0x00000602UL
+#define CKA_X2RATCHET_BAGSIZE           0x00000603UL
+#define CKA_X2RATCHET_BOBS_INITIAL_MESSAGE 0x00000604UL
+#define CKA_X2RATCHET_CKR               0x00000605UL
+#define CKA_X2RATCHET_CKS               0x00000606UL
+#define CKA_X2RATCHET_DHP               0x00000607UL
+#define CKA_X2RATCHET_DHR               0x00000608UL
+#define CKA_X2RATCHET_DHS               0x00000609UL
+#define CKA_X2RATCHET_HKR               0x0000060aUL
+#define CKA_X2RATCHET_HKS               0x0000060bUL
+#define CKA_X2RATCHET_ISALICE           0x0000060cUL
+#define CKA_X2RATCHET_MKSKIPPED         0x0000060dUL
+#define CKA_X2RATCHET_N                 0x0000060eUL
+#define CKA_X2RATCHET_NHK               0x0000060fUL
+#define CKA_X2RATCHET_NR                0x00000610UL
+#define CKA_X2RATCHET_NS                0x00000611UL
+#define CKA_X2RATCHET_PNS               0x00000612UL
+#define CKA_X2RATCHET_RK                0x00000613UL
+
 #define CKA_VENDOR_DEFINED              0x80000000UL
+
+/* Profile IDs for CKO_PROFILE objects (v3.0) */
+typedef CK_ULONG CK_PROFILE_ID;
+#define CKP_INVALID_ID                  0x00000000UL
+#define CKP_BASELINE_PROVIDER           0x00000001UL
+#define CKP_EXTENDED_PROVIDER           0x00000002UL
+#define CKP_AUTHENTICATION_TOKEN        0x00000003UL
+#define CKP_PUBLIC_CERTIFICATES_TOKEN   0x00000004UL
+#define CKP_COMPLETE_PROVIDER           0x00000005UL
+#define CKP_VENDOR_DEFINED              0x80000000UL
 
 /* CK_ATTRIBUTE is a structure that includes the type, length
  * and value of an attribute
@@ -610,6 +660,11 @@ typedef CK_ULONG          CK_MECHANISM_TYPE;
 #define CKM_DSA_SHA256                 0x00000014UL
 #define CKM_DSA_SHA384                 0x00000015UL
 #define CKM_DSA_SHA512                 0x00000016UL
+/* DSA SHA-3 variants (v3.0) */
+#define CKM_DSA_SHA3_224               0x00000018UL
+#define CKM_DSA_SHA3_256               0x00000019UL
+#define CKM_DSA_SHA3_384               0x0000001aUL
+#define CKM_DSA_SHA3_512               0x0000001bUL
 
 #define CKM_DH_PKCS_KEY_PAIR_GEN       0x00000020UL
 #define CKM_DH_PKCS_DERIVE             0x00000021UL
@@ -628,6 +683,16 @@ typedef CK_ULONG          CK_MECHANISM_TYPE;
 
 #define CKM_SHA224_RSA_PKCS            0x00000046UL
 #define CKM_SHA224_RSA_PKCS_PSS        0x00000047UL
+
+/* RSA with SHA-3 (v3.0) */
+#define CKM_SHA3_256_RSA_PKCS          0x00000060UL
+#define CKM_SHA3_384_RSA_PKCS          0x00000061UL
+#define CKM_SHA3_512_RSA_PKCS          0x00000062UL
+#define CKM_SHA3_256_RSA_PKCS_PSS      0x00000063UL
+#define CKM_SHA3_384_RSA_PKCS_PSS      0x00000064UL
+#define CKM_SHA3_512_RSA_PKCS_PSS      0x00000065UL
+#define CKM_SHA3_224_RSA_PKCS          0x00000066UL
+#define CKM_SHA3_224_RSA_PKCS_PSS      0x00000067UL
 
 #define CKM_SHA512_224                 0x00000048UL
 #define CKM_SHA512_224_HMAC            0x00000049UL
@@ -723,6 +788,58 @@ typedef CK_ULONG          CK_MECHANISM_TYPE;
 #define CKM_HOTP                       0x00000291UL
 #define CKM_ACTI                       0x000002A0UL
 #define CKM_ACTI_KEY_GEN               0x000002A1UL
+
+/* SHA-3 digests and HMAC (v3.0) */
+#define CKM_SHA3_256                   0x000002b0UL
+#define CKM_SHA3_256_HMAC              0x000002b1UL
+#define CKM_SHA3_256_HMAC_GENERAL      0x000002b2UL
+#define CKM_SHA3_256_KEY_GEN           0x000002b3UL
+#define CKM_SHA3_256_KEY_DERIVATION    0x000002b4UL
+#define CKM_SHA3_224                   0x000002b5UL
+#define CKM_SHA3_224_HMAC              0x000002b6UL
+#define CKM_SHA3_224_HMAC_GENERAL      0x000002b7UL
+#define CKM_SHA3_224_KEY_GEN           0x000002b8UL
+#define CKM_SHA3_224_KEY_DERIVATION    0x000002b9UL
+#define CKM_SHA3_384                   0x000002c0UL
+#define CKM_SHA3_384_HMAC              0x000002c1UL
+#define CKM_SHA3_384_HMAC_GENERAL      0x000002c2UL
+#define CKM_SHA3_384_KEY_GEN           0x000002c3UL
+#define CKM_SHA3_384_KEY_DERIVATION    0x000002c4UL
+#define CKM_SHA3_512                   0x000002d0UL
+#define CKM_SHA3_512_HMAC              0x000002d1UL
+#define CKM_SHA3_512_HMAC_GENERAL      0x000002d2UL
+#define CKM_SHA3_512_KEY_GEN           0x000002d3UL
+#define CKM_SHA3_512_KEY_DERIVATION    0x000002d4UL
+
+/* SHAKE (v3.0) */
+#define CKM_SHAKE_128                  0x000002f0UL
+#define CKM_SHAKE_256                  0x000002f1UL
+#define CKM_SHAKE_128_KEY_GEN          0x000002f2UL
+#define CKM_SHAKE_256_KEY_GEN          0x000002f3UL
+#define CKM_SHAKE_128_KEY_DERIVATION   0x000002f4UL
+#define CKM_SHAKE_256_KEY_DERIVATION   0x000002f5UL
+
+/* BLAKE2b (v3.0) */
+#define CKM_BLAKE2B_160                0x00000300UL
+#define CKM_BLAKE2B_160_HMAC           0x00000301UL
+#define CKM_BLAKE2B_160_HMAC_GENERAL   0x00000302UL
+#define CKM_BLAKE2B_160_KEY_DERIVE     0x00000303UL
+#define CKM_BLAKE2B_160_KEY_GEN        0x00000304UL
+#define CKM_BLAKE2B_256                0x00000305UL
+#define CKM_BLAKE2B_256_HMAC           0x00000306UL
+#define CKM_BLAKE2B_256_HMAC_GENERAL   0x00000307UL
+#define CKM_BLAKE2B_256_KEY_DERIVE     0x00000308UL
+#define CKM_BLAKE2B_256_KEY_GEN        0x00000309UL
+#define CKM_BLAKE2B_384                0x0000030aUL
+#define CKM_BLAKE2B_384_HMAC           0x0000030bUL
+#define CKM_BLAKE2B_384_HMAC_GENERAL   0x0000030cUL
+#define CKM_BLAKE2B_384_KEY_DERIVE     0x0000030dUL
+#define CKM_BLAKE2B_384_KEY_GEN        0x0000030eUL
+#define CKM_BLAKE2B_512                0x0000030fUL
+#define CKM_BLAKE2B_512_HMAC           0x00000310UL
+#define CKM_BLAKE2B_512_HMAC_GENERAL   0x00000311UL
+#define CKM_BLAKE2B_512_KEY_DERIVE     0x00000312UL
+#define CKM_BLAKE2B_512_KEY_GEN        0x00000313UL
 
 #define CKM_CAST_KEY_GEN               0x00000300UL
 #define CKM_CAST_ECB                   0x00000301UL
@@ -896,12 +1013,23 @@ typedef CK_ULONG          CK_MECHANISM_TYPE;
 #define CKM_ECDSA_SHA384               0x00001045UL
 #define CKM_ECDSA_SHA512               0x00001046UL
 
+/* ECDSA with SHA-3 (v3.0) */
+#define CKM_ECDSA_SHA3_224             0x00001047UL
+#define CKM_ECDSA_SHA3_256             0x00001048UL
+#define CKM_ECDSA_SHA3_384             0x00001049UL
+#define CKM_ECDSA_SHA3_512             0x0000104aUL
+
 #define CKM_ECDH1_DERIVE               0x00001050UL
 #define CKM_ECDH1_COFACTOR_DERIVE      0x00001051UL
 #define CKM_ECMQV_DERIVE               0x00001052UL
 
 #define CKM_ECDH_AES_KEY_WRAP          0x00001053UL
 #define CKM_RSA_AES_KEY_WRAP           0x00001054UL
+
+/* Edwards and Montgomery curve key generation + EdDSA (v3.0) */
+#define CKM_EC_EDWARDS_KEY_PAIR_GEN    0x00001055UL
+#define CKM_EC_MONTGOMERY_KEY_PAIR_GEN 0x00001056UL
+#define CKM_EDDSA                      0x00001057UL
 
 #define CKM_JUNIPER_KEY_GEN            0x00001060UL
 #define CKM_JUNIPER_ECB128             0x00001061UL
@@ -955,6 +1083,12 @@ typedef CK_ULONG          CK_MECHANISM_TYPE;
 #define CKM_GOST28147_MAC              0x00001223UL
 #define CKM_GOST28147_KEY_WRAP         0x00001224UL
 
+/* ChaCha20 and Poly1305 (v3.0) */
+#define CKM_CHACHA20_KEY_GEN           0x00001225UL
+#define CKM_CHACHA20                   0x00001226UL
+#define CKM_POLY1305_KEY_GEN           0x00001227UL
+#define CKM_POLY1305                   0x00001228UL
+
 #define CKM_DSA_PARAMETER_GEN          0x00002000UL
 #define CKM_DH_PKCS_PARAMETER_GEN      0x00002001UL
 #define CKM_X9_42_DH_PARAMETER_GEN     0x00002002UL
@@ -969,9 +1103,20 @@ typedef CK_ULONG          CK_MECHANISM_TYPE;
 #define CKM_AES_CFB1                   0x00002108UL
 #define CKM_AES_KEY_WRAP               0x00002109UL     /* WAS: 0x00001090 */
 #define CKM_AES_KEY_WRAP_PAD           0x0000210AUL     /* WAS: 0x00001091 */
+#define CKM_AES_KEY_WRAP_KWP           0x0000210BUL  /* v3.0 */
 
 #define CKM_RSA_PKCS_TPM_1_1           0x00004001UL
 #define CKM_RSA_PKCS_OAEP_TPM_1_1      0x00004002UL
+
+/* SP 800-108 KDFs (v3.0) */
+#define CKM_SP800_108_COUNTER_KDF             0x000003acUL
+#define CKM_SP800_108_FEEDBACK_KDF            0x000003adUL
+#define CKM_SP800_108_DOUBLE_PIPELINE_KDF     0x000003aeUL
+
+/* HKDF (v3.0) */
+#define CKM_HKDF_DERIVE                0x0000402cUL
+#define CKM_HKDF_DATA                  0x0000402dUL
+#define CKM_HKDF_KEY_GEN               0x0000402eUL
 
 #define CKM_VENDOR_DEFINED             0x80000000UL
 
@@ -1016,6 +1161,14 @@ typedef struct CK_MECHANISM_INFO {
 #define CKF_WRAP               0x00020000UL
 #define CKF_UNWRAP             0x00040000UL
 #define CKF_DERIVE             0x00080000UL
+
+/* Multi-message operation flags (v3.0) */
+#define CKF_MESSAGE_ENCRYPT    0x00000002UL
+#define CKF_MESSAGE_DECRYPT    0x00000004UL
+#define CKF_MESSAGE_SIGN       0x00000008UL
+#define CKF_MESSAGE_VERIFY     0x00000010UL
+#define CKF_MULTI_MESSAGE      0x00000020UL
+#define CKF_FIND_OBJECTS       0x00000040UL
 
 /* Describe a token's EC capabilities not available in mechanism
  * information.
