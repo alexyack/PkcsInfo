@@ -983,6 +983,82 @@ void PrintAttrributeName(CK_ATTRIBUTE_TYPE type, CK_RV ckr)
 		{
 			printf("              ETCKA_80001401: ");
 		}
+		else if(type == CKA_PROFILE_ID)
+		{
+			printf("              CKA_PROFILE_ID: ");
+		}
+		else if(type == CKA_X2RATCHET_BAG)
+		{
+			printf("         CKA_X2RATCHET_BAG: ");
+		}
+		else if(type == CKA_X2RATCHET_BAGSIZE)
+		{
+			printf("     CKA_X2RATCHET_BAGSIZE: ");
+		}
+		else if(type == CKA_X2RATCHET_BOBS_INITIAL_MESSAGE)
+		{
+			printf("CKA_X2RATCHET_BOBS_INITIAL: ");
+		}
+		else if(type == CKA_X2RATCHET_CKR)
+		{
+			printf("         CKA_X2RATCHET_CKR: ");
+		}
+		else if(type == CKA_X2RATCHET_CKS)
+		{
+			printf("         CKA_X2RATCHET_CKS: ");
+		}
+		else if(type == CKA_X2RATCHET_DHP)
+		{
+			printf("         CKA_X2RATCHET_DHP: ");
+		}
+		else if(type == CKA_X2RATCHET_DHR)
+		{
+			printf("         CKA_X2RATCHET_DHR: ");
+		}
+		else if(type == CKA_X2RATCHET_DHS)
+		{
+			printf("         CKA_X2RATCHET_DHS: ");
+		}
+		else if(type == CKA_X2RATCHET_HKR)
+		{
+			printf("         CKA_X2RATCHET_HKR: ");
+		}
+		else if(type == CKA_X2RATCHET_HKS)
+		{
+			printf("         CKA_X2RATCHET_HKS: ");
+		}
+		else if(type == CKA_X2RATCHET_ISALICE)
+		{
+			printf("     CKA_X2RATCHET_ISALICE: ");
+		}
+		else if(type == CKA_X2RATCHET_MKSKIPPED)
+		{
+			printf("   CKA_X2RATCHET_MKSKIPPED: ");
+		}
+		else if(type == CKA_X2RATCHET_N)
+		{
+			printf("           CKA_X2RATCHET_N: ");
+		}
+		else if(type == CKA_X2RATCHET_NHK)
+		{
+			printf("         CKA_X2RATCHET_NHK: ");
+		}
+		else if(type == CKA_X2RATCHET_NR)
+		{
+			printf("          CKA_X2RATCHET_NR: ");
+		}
+		else if(type == CKA_X2RATCHET_NS)
+		{
+			printf("          CKA_X2RATCHET_NS: ");
+		}
+		else if(type == CKA_X2RATCHET_PNS)
+		{
+			printf("         CKA_X2RATCHET_PNS: ");
+		}
+		else if(type == CKA_X2RATCHET_RK)
+		{
+			printf("          CKA_X2RATCHET_RK: ");
+		}
 		else
 		{
 			printf("            UNKNOWN %08X: ", type);
