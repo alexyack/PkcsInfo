@@ -2203,6 +2203,7 @@ void PrintMechanismType(CK_MECHANISM_TYPE ckMechType)
 	else if(ckMechType == CKM_TLS_GOST_PRF                       		   ) { printf("CKM_TLS_GOST_PRF                       				 \n"); }
 	else if(ckMechType == CKM_TLS_GOST_PRE_MASTER_KEY_GEN        		   ) { printf("CKM_TLS_GOST_PRE_MASTER_KEY_GEN        				 \n"); }
 	else if(ckMechType == CKM_UEK_DERIVE        						   ) { printf("CKM_UEK_DERIVE        								 \n"); }
+	else if(ckMechType == NSSCK_VENDOR_ALADDIN                             ) { printf("NSSCK_VENDOR_ALADDIN\n"); }
 	else if(ckMechType == CKM_NETSCAPE_PBE_SHA1_DES_CBC          		   ) { printf("CKM_NETSCAPE_PBE_SHA1_DES_CBC          				 \n"); }
 	else if(ckMechType == CKM_NETSCAPE_PBE_SHA1_TRIPLE_DES_CBC   		   ) { printf("CKM_NETSCAPE_PBE_SHA1_TRIPLE_DES_CBC   				 \n"); }
 	else if(ckMechType == CKM_NETSCAPE_PBE_SHA1_40_BIT_RC2_CBC   		   ) { printf("CKM_NETSCAPE_PBE_SHA1_40_BIT_RC2_CBC   				 \n"); }
@@ -2466,6 +2467,8 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 							printf("\nObject %12d [%08X]:\n", hObject, hObject);
 
 							PrintObjectInfo(hSession, hObject, 0, 0x0800);
+							PrintObjectInfo(hSession, hObject, 0x80000000, 0x80020000);
+							PrintObjectInfo(hSession, hObject, 0xC4321000, 0xC4322000);
 
 							hGlobalObjects[nGlobalObjects++] = hObject;
 						}
@@ -2501,7 +2504,8 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 							printf("\nObject %12d [%08X]:\n", hObject, hObject);
 
 							PrintObjectInfo(hSession, hObject, 0, 0x0800);
-							PrintObjectInfo(hSession, hObject, 0x80000000, 0x80010000);
+							PrintObjectInfo(hSession, hObject, 0x80000000, 0x80020000);
+							PrintObjectInfo(hSession, hObject, 0xC4321000, 0xC4322000);
 
 							hGlobalObjects[nGlobalObjects++] = hObject;
 						}
@@ -2537,7 +2541,8 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 							printf("\nObject %12d [%08X]:\n", hObject, hObject);
 
 							PrintObjectInfo(hSession, hObject, 0, 0x0800);
-							PrintObjectInfo(hSession, hObject, 0x80000000, 0x80010000);
+							PrintObjectInfo(hSession, hObject, 0x80000000, 0x80020000);
+							PrintObjectInfo(hSession, hObject, 0xC4321000, 0xC4322000);
 
 							hGlobalObjects[nGlobalObjects++] = hObject;
 						}
@@ -2573,7 +2578,7 @@ void PrintObjectsInfo(CK_SLOT_ID ckSlot, char* szPin)
 							printf("\nObject %12d [%08X]:\n", hObject, hObject);
 
 							PrintObjectInfo(hSession, hObject, 0, 0x10000);
-							PrintObjectInfo(hSession, hObject, 0x80000000, 0x80010000);
+							PrintObjectInfo(hSession, hObject, 0x80000000, 0x80020000);
 
 							hGlobalObjects[nGlobalObjects++] = hObject;
 						}
